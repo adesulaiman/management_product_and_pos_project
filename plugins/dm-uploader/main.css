@@ -1,0 +1,116 @@
+/* 
+	First: A couple styles to make the demo page look good
+ */
+.p-5 {
+    padding: 7rem!important;
+}
+
+.card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.p-2 {
+    padding: .5rem!important;
+}
+
+.col {
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical!important;
+    -webkit-box-direction: normal!important;
+    -ms-flex-direction: column!important;
+    flex-direction: column!important;
+}
+.d-flex {
+    display: -webkit-box!important;
+    display: -ms-flexbox!important;
+    display: flex!important;
+}
+
+#files {
+    overflow-y: scroll !important;
+    height: 200px;
+}
+
+nav {
+	border-top: 4px solid #28a745;
+}
+
+nav li.active {
+	border-bottom: 4px solid #28a745;	
+}
+
+[class*="col-"] {
+}
+hr {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+.progress {
+	height: 1.5rem;
+}
+
+#files {
+    overflow-y: scroll !important;
+    min-height: 200px;
+}
+@media (min-width: 768px) {
+}
+
+#debug {
+	overflow-y: scroll !important;
+	height: 180px;	
+}
+
+
+/* These are for the single examle */
+.preview-img {
+	width: 64px;
+	height: 64px;
+}
+
+
+form.active {
+	border-color: red !important;
+}
+
+form .progress {
+	height: 38px;
+}
+
+.dm-uploader {
+	border: 0.25rem dashed #A5A5C7;
+}
+.dm-uploader.active {
+	border-color: red;
+
+	border-style: solid;
+}

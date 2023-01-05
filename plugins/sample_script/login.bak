@@ -1,0 +1,160 @@
+<?php
+require "config.php";
+require "lib/base/db.php";
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title><?php echo $title ?></title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="<?php echo $dir?>assets/img/logo.png"/>
+
+
+    <link type="text/css" rel="stylesheet" href="<?php echo $dir?>plugins/toater/toastr.min.css"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/login/css/main.css">
+
+	<link rel="stylesheet" type="text/css" href="<?php echo $dir?>plugins/spinner/ladda.min.css">
+<!--===============================================================================================-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yesteryear&display=swap" rel="stylesheet">
+
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100" style="background: url(http://www.essedi.es/wp-content/uploads/2017/11/pwd_protected_file_composition_original.gif);justify-content: flex-start;;background-size: cover;">
+			
+			<div class="wrap-login100" style="padding: 15px;float: left;width:50%;background: rgb(6 23 74 / 100%)">
+				<div class="col-md-12 text-center" >
+					<img src="<?php echo $dir ?>assets/img/logo.png" style="width: 30%;"/><br>
+					<span class="login50-form-title" style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;display: block;color:white;font-family: 'Yesteryear', cursive;">
+						Sampang Hebat Bermartabat
+					</span>
+				</div>
+
+
+					
+
+				<form class="login100-form validate-form login text-center" style="width:100%;" action="javascript:void(0);">
+					<span class="login100-form-title" style="padding-bottom: 5px;color:white;font-size: 20px;    font-family: unset;">
+						<?php echo $appname?>
+					</span>
+					<span class="login50-form-title" style="text-align: center;font-size: 13px;padding-bottom: 10px;width: 100%;display: block;">
+					</span>
+					
+					<div class="row">
+						<div class="col-md-5">
+							<div class="wrap-input100 validate-input" data-validate = "User ID is required">
+								
+								<input class="input100 userid" type="text" name="userid" placeholder="User ID">
+								<span class="focus-input100"></span>
+								<span class="symbol-input100">
+									<i class="fa fa-user" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+
+						<div class="col-md-5">
+							<div class="wrap-input100 validate-input" data-validate = "Password is required">
+								<input class="input100 pass" type="password" name="pass" placeholder="Password">
+								<span class="focus-input100"></span>
+								<span class="symbol-input100">
+									<i class="fa fa-lock" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+						
+						<div class="col-md-2">
+							<div class="container-login100-form-btn" style="padding:0">
+								<button type="button" class="login100-form-btn submit ladda-button" data-color="green" data-style="contract">
+									Login
+								</button>
+							</div>
+						</div>
+					
+					</div>
+
+					
+					
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	
+<!--===============================================================================================-->	
+	<script src="<?php echo $dir?>plugins/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+
+	<script src="<?php echo $dir?>plugins/spinner/spin.min.js"></script>
+	<script src="<?php echo $dir?>plugins/spinner/ladda.min.js"></script>
+<!--===============================================================================================-->
+	<script type="text/javascript" src="<?php echo $dir?>plugins/toater/toastr.min.js"></script>
+	<script type="text/javascript" src="<?php echo $dir?>plugins/dist/js/function.js"></script>
+
+	<script src="<?php echo $dir?>plugins/login/vendor/bootstrap/js/popper.js"></script>
+	<script src="<?php echo $dir?>plugins/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo $dir?>plugins/login/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo $dir?>plugins/login/vendor/tilt/tilt.jquery.min.js"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="<?php echo $dir?>plugins/login/js/main.js"></script>
+
+	<script type="text/javascript">
+		var l = Ladda.create( document.querySelector( '.submit' ) );
+		
+
+		$('.submit').on('click', function(){
+			l.start();
+
+			var login = $('.login').serialize();
+			$.ajax({
+				url: "./lib/base/login_act.php?"+login,
+				dataType: "json",
+				success: function(msg){
+					popup(msg.status, msg.text, '');
+					
+					if(msg.status == 'success')
+					{
+						window.location.href = msg.page;
+					}else{
+						l.stop();
+					}
+
+				},
+				error: function(err){
+					popup('error', 'Error System', '');	
+					console.log(err);
+					l.stop();
+				}
+			})
+		})
+	</script>
+
+</body>
+</html>

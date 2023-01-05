@@ -1,0 +1,9 @@
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^api/([0-9a-zA-Z-]+)/([0-9a-zA-Z-]+)$ lib/base/rest_api_client.php?repo_api=$1&name_web=$2
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+</IfModule>
+
+# END WordPress
