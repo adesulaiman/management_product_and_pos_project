@@ -5,10 +5,10 @@ $dir = 'http://localhost/applications/management_product_and_pos_project/';
 
 $title = "IFM Kabupaten Sampang";
 $appname = "INTEGRASI FILE MANAGER";
-$dbName = "ifm_sampang";
-$dbUser = "root";
-$dbPassword = "";
-$dbHost = "localhost";
+$dbName = "u965363723_management";
+$dbUser = "u965363723_superuser";
+$dbPassword = "g2nLV|gG#VU*";
+$dbHost = "153.92.13.103";
 $port = '3306';
 $dbRDBMS = 'mysql';
 $datePHP = 'Y-m-d';
