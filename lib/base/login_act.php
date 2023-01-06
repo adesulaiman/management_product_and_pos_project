@@ -12,8 +12,13 @@ if ($login_method == 'otp') {
 		$otp = $_GET['otp'];
 		$xCode = $_GET['xCode'];
 
-		$q = $adeQ->select($adeQ->prepare("select u.* from core_user u
+		$q = $adeQ->select($adeQ->prepare("select u.*, l.level_id, j.id as id_jabatan, o.id_identity from core_user u
+		left join data_jabatan j on u.jabatan=j.id 
+		left join core_level l on j.id_level=l.id 
+		left join data_opd o on u.opd=o.opd
 		where u.isactive=1 and u.userid=%s", $userid));
+
+		$strukturH = getStrukturHirarki($q[0]['id_jabatan'], $adeQ);
 
 		$status = '';
 		$page = '';
@@ -58,8 +63,12 @@ if ($login_method == 'otp') {
 							$_SESSION['userUniqId'] = $q[0]['id'];
 							$_SESSION['username'] = $q[0]['username'];
 							$_SESSION['opd'] = $q[0]['opd'];
+							$_SESSION['level_id'] = $q[0]['level_id'];
+							$_SESSION['id_jabatan'] = $q[0]['id_jabatan'];
+							$_SESSION['struktur_hirarki'] = $strukturH;
 							$_SESSION['no_handphone'] = $q[0]['no_handphone'];
 							$_SESSION['roleForm'] = $roleForm;
+							$_SESSION['opd_code'] = $q[0]['id_identity'];
 						} else {
 							$fl = 'error';
 							$status = 'Login Gagal, Akun Anda Terkunci, Mohon hubungi admin untuk unlock user !';
@@ -73,8 +82,12 @@ if ($login_method == 'otp') {
 						$_SESSION['id_group_management'] = $q[0]['id_group_management'];
 						$_SESSION['username'] = $q[0]['username'];
 						$_SESSION['opd'] = $q[0]['opd'];
+						$_SESSION['level_id'] = $q[0]['level_id'];
+						$_SESSION['struktur_hirarki'] = $strukturH;
+						$_SESSION['id_jabatan'] = $q[0]['id_jabatan'];
 						$_SESSION['no_handphone'] = $q[0]['no_handphone'];
 						$_SESSION['roleForm'] = $roleForm;
+						$_SESSION['opd_code'] = $q[0]['id_identity'];
 					}
 				} else {
 
@@ -116,7 +129,7 @@ if ($login_method == 'otp') {
 				$getRF = $adeQ->select($adeQ->prepare("select 
 									SPLIT_PART(SPLIT_PART(links, '=', 2), '&',1) as form
 									from core_vw_rolemenus
-									where iduser=%d", $q[0]['id']));
+									where iduser=%d", $q[0]['id_group_management']));
 
 				//if user lock
 				if($q[0]['wrongpass'] >= $maxTryLogin){
@@ -138,6 +151,7 @@ if ($login_method == 'otp') {
 							$page = './';
 							$_SESSION['userid'] = $q[0]['userid'];
 							$_SESSION['userUniqId'] = $q[0]['id'];
+							$_SESSION['id_group_management'] = $q[0]['id_group_management'];
 							$_SESSION['username'] = $q[0]['username'];
 							$_SESSION['no_handphone'] = $q[0]['no_handphone'];
 							$_SESSION['roleForm'] = $roleForm;
@@ -151,6 +165,7 @@ if ($login_method == 'otp') {
 						$page = './';
 						$_SESSION['userid'] = $q[0]['userid'];
 						$_SESSION['userUniqId'] = $q[0]['id'];
+						$_SESSION['id_group_management'] = $q[0]['id_group_management'];
 						$_SESSION['username'] = $q[0]['username'];
 						$_SESSION['no_handphone'] = $q[0]['no_handphone'];
 						$_SESSION['roleForm'] = $roleForm;

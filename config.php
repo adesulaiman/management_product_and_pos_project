@@ -1,7 +1,7 @@
 <?php
 
 $path = "..";
-$dir = 'http://localhost/applications/ifm.sampangkab.go.id/';
+$dir = 'http://localhost/applications/management_product_and_pos_project/';
 
 $title = "IFM Kabupaten Sampang";
 $appname = "INTEGRASI FILE MANAGER";
@@ -17,7 +17,7 @@ $dateJS = 'dd-mm-yyyy';
 $maxSizeUpload = 5000000; //5MB 
 $maxTryLogin = 99;
 $expired_login = 90000; //time per second
-$login_method = 'otp'; // otp or password
+$login_method = 'password'; // otp or password
 $expired_otp = 10; // in minutes
 
 
