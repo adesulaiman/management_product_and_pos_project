@@ -77,6 +77,8 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
   <link rel="stylesheet" href="<?php echo $dir ?>plugins/drag-and-drop-placeholders-into-PDF/css/style.css?v=2">
 
+  <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Yesteryear&display=swap" rel="stylesheet">
+
   <!-- jQuery 2.2.3 -->
   <script src="<?php echo $dir ?>plugins/jQuery/jquery-2.2.3.min.js"></script>
   <script type="text/javascript" src="<?php echo $dir ?>plugins/toater/toastr.min.js"></script>
@@ -121,6 +123,10 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
     div.container {
       width: 80%;
+    }
+
+    h1{
+      color: white;
     }
 
     .skin-black .wrapper,
@@ -229,10 +235,10 @@ $getGroup = $adeQ->select($adeQ->prepare(
       <!-- Logo -->
       <a href="<?php echo $dir ?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img src="<?php echo $dir ?>assets/img/logo.png" style="width: 70%;" /><br></span>
+        <span class="logo-mini"><img src="<?php echo $dir ?>assets/img/logo.png?v=1" style="width: 70%;" /><br></span>
         <!-- logo for regular state and mobile devices -->
         <!-- <span class="logo-lg"><img src="<?php echo $dir ?>assets/img/logo_apps.png" style="width: 60%;"/></span> -->
-        <span class="logo-lg">PEMKAB SAMPANG</span>
+        <span class="logo-lg" style="font-family: 'Grand Hotel', cursive; font-size:30px"><?php echo $organization ?></span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top">
@@ -266,7 +272,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
       <!--div class="header" align="center" style="border=1"><font color="#FFFFFF">MAIN NAVIGATION</font></div-->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?php echo $dir ?>assets/img/admin.jpg" alt="User Image">
+          <img src="<?php echo $dir ?>assets/img/admin.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p><?php echo $_SESSION['username'] ?></p>
@@ -289,7 +295,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" id="mainContent" style="background: url(<?php echo $dir ?>assets/img/background-login3.jpeg);background-size: cover;">
+    <div class="content-wrapper" id="mainContent" style="background: url(<?php echo $dir ?>assets/img/background-login4.jpg) rgba(0, 0, 0, 0.4);background-blend-mode: multiply;background-size: cover;">
 
     </div>
 
@@ -469,7 +475,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
         }
         $("#mainNavigate").html(linksx);
         $("#mainContent").empty();
-        $("#mainContent").html('<div class="overlay" style="font-size: 20px;text-align:center;margin-top: 20%;"><i class="fa fa-refresh fa-spin"></i>  Mohon Tunggu</div>');
+        $("#mainContent").html('<div class="overlay" style="font-size: 20px;text-align:center;margin-top: 25%;color:white"><i class="fa fa-refresh fa-spin"></i>  Mohon Tunggu</div>');
         $("#mainContent").load(url.replaceAll(" ", "%20"));
       }
 
@@ -482,6 +488,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
           method: "POST",
           url: "./lib/base/load_menu.php",
           success: function(msg) {
+            console.log(msg);
             var jsonstr = msg;
             //console.log(JSON.parse(jsonstr));
             $("#sidebarmenu").html("");

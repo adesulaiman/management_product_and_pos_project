@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `getExt` (`Value` LONGTEXT, `delimeter` VARCHAR(10)) RETURNS TEXT CHARSET utf8mb4 BEGIN
+CREATE  FUNCTION `getExt` (`Value` LONGTEXT, `delimeter` VARCHAR(10)) RETURNS TEXT CHARSET utf8mb4 BEGIN
 DECLARE front TEXT DEFAULT NULL;
 DECLARE frontlen INT DEFAULT NULL;
 DECLARE TempValue TEXT DEFAULT NULL;
@@ -43,7 +43,7 @@ END LOOP;
 return TempValue;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `labelsplit` (`Value` LONGTEXT, `delimeter` VARCHAR(10)) RETURNS TEXT CHARSET utf8mb4 BEGIN
+CREATE  FUNCTION `labelsplit` (`Value` LONGTEXT, `delimeter` VARCHAR(10)) RETURNS TEXT CHARSET utf8mb4 BEGIN
 DECLARE front TEXT DEFAULT NULL;
 DECLARE frontlen INT DEFAULT NULL;
 DECLARE TempValue TEXT DEFAULT NULL;
@@ -61,7 +61,7 @@ END LOOP;
 return TempValue;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `SPLIT_PART` (`s` VARCHAR(1024), `del` CHAR(1), `i` INT(11)) RETURNS VARCHAR(1024) CHARSET latin1 BEGIN
+CREATE  FUNCTION `SPLIT_PART` (`s` VARCHAR(1024), `del` CHAR(1), `i` INT(11)) RETURNS VARCHAR(1024) CHARSET latin1 BEGIN
 
         DECLARE n INT ;
 
@@ -984,22 +984,6 @@ CREATE TABLE `vw_select_tags` (
 
 -- --------------------------------------------------------
 
---
--- Stand-in structure for view `vw_select_user`
--- (See below for the actual view)
---
-CREATE TABLE `vw_select_user` (
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `vw_user_level`
--- (See below for the actual view)
---
-CREATE TABLE `vw_user_level` (
-);
-
 -- --------------------------------------------------------
 
 --
@@ -1007,7 +991,7 @@ CREATE TABLE `vw_user_level` (
 --
 DROP TABLE IF EXISTS `core_vw_rolemenus`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `core_vw_rolemenus`  AS SELECT concat(concat(`core_menus`.`idmodule`,'-'),`core_menus`.`id`) AS `idmenus`, `core_menus`.`idmodule` AS `idmodule`, `core_menus`.`menu` AS `menu`, `core_menus`.`icon` AS `icon`, `core_menus`.`withframe` AS `withframe`, CASE WHEN `core_menus`.`parent` = 0 THEN `core_menus`.`parent` ELSE concat(concat(`core_menus`.`idmodule`,'-'),`core_menus`.`parent`) END AS `parent`, 0 AS `child`, `core_menus`.`links` AS `links`, `rlm`.`idmenu` AS `idmenu`, `rlm`.`iduser` AS `iduser`, `core_menus`.`sub_page` AS `sub_page` FROM (`core_menus` left join `core_rolemenu` `rlm` on(`core_menus`.`id` = `rlm`.`idmenu`)) ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `core_vw_rolemenus`  AS SELECT concat(concat(`core_menus`.`idmodule`,'-'),`core_menus`.`id`) AS `idmenus`, `core_menus`.`idmodule` AS `idmodule`, `core_menus`.`menu` AS `menu`, `core_menus`.`icon` AS `icon`, `core_menus`.`withframe` AS `withframe`, CASE WHEN `core_menus`.`parent` = 0 THEN `core_menus`.`parent` ELSE concat(concat(`core_menus`.`idmodule`,'-'),`core_menus`.`parent`) END AS `parent`, 0 AS `child`, `core_menus`.`links` AS `links`, `rlm`.`idmenu` AS `idmenu`, `rlm`.`iduser` AS `iduser`, `core_menus`.`sub_page` AS `sub_page` FROM (`core_menus` left join `core_rolemenu` `rlm` on(`core_menus`.`id` = `rlm`.`idmenu`)) ;
 
 -- --------------------------------------------------------
 
@@ -1016,7 +1000,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_access`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_access`  AS SELECT `u`.`id` AS `id`, CASE WHEN `u`.`wrongpass` >= 3 THEN concat('<small class="label bg-red"><i class="fa fa-lock"></i> Lock</small> ',`u`.`userid`) ELSE `u`.`userid` END AS `userid`, `u`.`userpass` AS `userpass`, `u`.`username` AS `username`, `u`.`email` AS `email`, `u`.`firstname` AS `firstname`, `u`.`lastname` AS `lastname`, `u`.`islogin` AS `islogin`, `u`.`isactive` AS `isactive`, `u`.`rolemenu` AS `rolemenu`, `u`.`rolearea` AS `rolearea`, `u`.`createby` AS `createby`, `u`.`createdate` AS `createdate`, `u`.`approvedby` AS `approvedby`, `u`.`approveddate` AS `approveddate`, `u`.`no_handphone` AS `no_handphone`, `gr`.`group_name` AS `id_group_management` FROM (`core_user` `u` left join `core_group` `gr` on(`u`.`id_group_management` = `gr`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_access`  AS SELECT `u`.`id` AS `id`, CASE WHEN `u`.`wrongpass` >= 3 THEN concat('<small class="label bg-red"><i class="fa fa-lock"></i> Lock</small> ',`u`.`userid`) ELSE `u`.`userid` END AS `userid`, `u`.`userpass` AS `userpass`, `u`.`username` AS `username`, `u`.`email` AS `email`, `u`.`firstname` AS `firstname`, `u`.`lastname` AS `lastname`, `u`.`islogin` AS `islogin`, `u`.`isactive` AS `isactive`, `u`.`rolemenu` AS `rolemenu`, `u`.`rolearea` AS `rolearea`, `u`.`createby` AS `createby`, `u`.`createdate` AS `createdate`, `u`.`approvedby` AS `approvedby`, `u`.`approveddate` AS `approveddate`, `u`.`no_handphone` AS `no_handphone`, `gr`.`group_name` AS `id_group_management` FROM (`core_user` `u` left join `core_group` `gr` on(`u`.`id_group_management` = `gr`.`id`)) ;
 
 -- --------------------------------------------------------
 
@@ -1025,7 +1009,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_data_file`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_data_file`  AS SELECT `data_file`.`id` AS `id`, `data_file`.`file_name` AS `file_name`, `data_file`.`description` AS `description`, `data_file`.`category` AS `category`, `labelsplit`(`data_file`.`tags`,'|') AS `tags`, `data_file`.`created_by` AS `created_by`, `data_file`.`created_date` AS `created_date`, `data_file`.`created_by` AS `id_user` FROM `data_file` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_data_file`  AS SELECT `data_file`.`id` AS `id`, `data_file`.`file_name` AS `file_name`, `data_file`.`description` AS `description`, `data_file`.`category` AS `category`, `labelsplit`(`data_file`.`tags`,'|') AS `tags`, `data_file`.`created_by` AS `created_by`, `data_file`.`created_date` AS `created_date`, `data_file`.`created_by` AS `id_user` FROM `data_file` ;
 
 -- --------------------------------------------------------
 
@@ -1034,7 +1018,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_data_file_all`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_data_file_all`  AS SELECT `data_file`.`id` AS `id`, CASE WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) = 'pdf' THEN concat('<img src="assets/img/pdf.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,' <button style="margin-left:5px" class="btn btn-warning btn-xs showfile" data-id="',`data_file`.`file_name`,'"><i class="fa fa-fw fa-search-plus"></i> show</button><br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('xlsx','xls') THEN concat('<img src="assets/img/excel.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('docx','doc') THEN concat('<img src="assets/img/word.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('png','jpg','gif','jpeg') THEN concat('<img src="assets/img/image.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,' <button style="margin-left:5px" class="btn btn-warning btn-xs showfile" data-id="',`data_file`.`file_name`,'"><i class="fa fa-fw fa-search-plus"></i> show</button><br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) ELSE concat('<img src="assets/img/unkown.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) END AS `file_name`, `data_file`.`file_name` AS `id_file_name`, `data_file`.`description` AS `id_description`, `data_file`.`category` AS `id_category`, `data_file`.`tags` AS `id_tags` FROM `data_file` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_data_file_all`  AS SELECT `data_file`.`id` AS `id`, CASE WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) = 'pdf' THEN concat('<img src="assets/img/pdf.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,' <button style="margin-left:5px" class="btn btn-warning btn-xs showfile" data-id="',`data_file`.`file_name`,'"><i class="fa fa-fw fa-search-plus"></i> show</button><br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('xlsx','xls') THEN concat('<img src="assets/img/excel.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('docx','doc') THEN concat('<img src="assets/img/word.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) WHEN lcase(`getExt`(`data_file`.`file_name`,'.')) in ('png','jpg','gif','jpeg') THEN concat('<img src="assets/img/image.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,' <button style="margin-left:5px" class="btn btn-warning btn-xs showfile" data-id="',`data_file`.`file_name`,'"><i class="fa fa-fw fa-search-plus"></i> show</button><br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) ELSE concat('<img src="assets/img/unkown.png" style="width: 16px;margin-right: 5px;"/> ',`data_file`.`file_name`,'<br>Desc : ',`data_file`.`description`,'<br>category : ',`data_file`.`category`,'<br>tags : ',`labelsplit`(`data_file`.`tags`,'|'),'<br>Date : ',`data_file`.`created_date`) END AS `file_name`, `data_file`.`file_name` AS `id_file_name`, `data_file`.`description` AS `id_description`, `data_file`.`category` AS `id_category`, `data_file`.`tags` AS `id_tags` FROM `data_file` ;
 
 -- --------------------------------------------------------
 
@@ -1043,7 +1027,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_group_management`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_group_management`  AS SELECT `core_group`.`id` AS `id`, `core_group`.`group_name` AS `group_name`, `core_group`.`created_by` AS `created_by`, `core_group`.`created_date` AS `created_date`, `core_group`.`update_by` AS `update_by`, `core_group`.`update_date` AS `update_date` FROM `core_group` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_group_management`  AS SELECT `core_group`.`id` AS `id`, `core_group`.`group_name` AS `group_name`, `core_group`.`created_by` AS `created_by`, `core_group`.`created_date` AS `created_date`, `core_group`.`update_by` AS `update_by`, `core_group`.`update_date` AS `update_date` FROM `core_group` ;
 
 -- --------------------------------------------------------
 
@@ -1052,7 +1036,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_menu_set_role`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_menu_set_role`  AS SELECT `core_menus`.`id` AS `id`, `core_menus`.`menu` AS `menu` FROM `core_menus` WHERE `core_menus`.`links` is not null ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_menu_set_role`  AS SELECT `core_menus`.`id` AS `id`, `core_menus`.`menu` AS `menu` FROM `core_menus` WHERE `core_menus`.`links` is not null ;
 
 -- --------------------------------------------------------
 
@@ -1061,7 +1045,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_select_category`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_category`  AS SELECT `data_category`.`category` AS `id`, `data_category`.`category` AS `text` FROM `data_category` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_select_category`  AS SELECT `data_category`.`category` AS `id`, `data_category`.`category` AS `text` FROM `data_category` ;
 
 -- --------------------------------------------------------
 
@@ -1070,7 +1054,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_select_group`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_group`  AS SELECT `core_group`.`id` AS `id`, `core_group`.`group_name` AS `text` FROM `core_group` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_select_group`  AS SELECT `core_group`.`id` AS `id`, `core_group`.`group_name` AS `text` FROM `core_group` ;
 
 -- --------------------------------------------------------
 
@@ -1079,7 +1063,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_select_opd`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_opd`  AS SELECT `data_opd`.`opd` AS `id`, `data_opd`.`opd` AS `text` FROM `data_opd` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_select_opd`  AS SELECT `data_opd`.`opd` AS `id`, `data_opd`.`opd` AS `text` FROM `data_opd` ;
 
 -- --------------------------------------------------------
 
@@ -1088,7 +1072,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_select_roles_jabatan`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_roles_jabatan`  AS SELECT `core_roles_jabatan`.`roles` AS `id`, `core_roles_jabatan`.`roles` AS `text` FROM `core_roles_jabatan` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_select_roles_jabatan`  AS SELECT `core_roles_jabatan`.`roles` AS `id`, `core_roles_jabatan`.`roles` AS `text` FROM `core_roles_jabatan` ;
 
 -- --------------------------------------------------------
 
@@ -1097,25 +1081,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_select_tags`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_tags`  AS SELECT `data_tags`.`tags` AS `id`, `data_tags`.`tags` AS `text` FROM `data_tags` ;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_select_tags`  AS SELECT `data_tags`.`tags` AS `id`, `data_tags`.`tags` AS `text` FROM `data_tags` ;
 
 -- --------------------------------------------------------
-
---
--- Structure for view `vw_select_user`
---
-DROP TABLE IF EXISTS `vw_select_user`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_select_user`  AS SELECT `u`.`id` AS `id`, concat(`u`.`userid`,' - ',`u`.`username`,' (',`j`.`jabatan`,' ',`j`.`opd`,')') AS `text` FROM (`core_user` `u` left join `data_jabatan` `j` on(`u`.`jabatan` = `j`.`id`)) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `vw_user_level`
---
-DROP TABLE IF EXISTS `vw_user_level`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_user_level`  AS SELECT `u`.`id` AS `id`, `l`.`id` AS `level`, CASE WHEN `l`.`id` is null THEN concat('<select data-id="',`u`.`id`,'" class="id-level" style="width:200px"><option selected value="">','Please Select','</option></select>') ELSE concat('<select data-id="',`u`.`id`,'" class="id-level" style="width:200px"><option selected value="',`l`.`id`,'">',`l`.`name_level`,' - ',`l`.`opd`,'</option></select>') END AS `level_id`, `u`.`userid` AS `userid`, `u`.`username` AS `username`, `u`.`roles` AS `roles`, `u`.`jabatan` AS `jabatan`, `u`.`opd` AS `opd` FROM (`core_user` `u` left join `core_level` `l` on(`u`.`id_level` = `l`.`id`)) WHERE `u`.`roles` in ('Admin TTE','Pejabat') ;
 
 --
 -- Indexes for dumped tables

@@ -31,16 +31,6 @@ $qSession = $adeQ->select($adeQ->prepare(
 
           <h3 class="profile-username text-center"><?php echo $qSession[0]['username'] ?></h3>
 
-          <small>Status Sertifikat</small><br>
-          <?php
-          if ($qSession[0]['certificate'] != null) {
-            echo '<img class="text-center" src="assets/img/certGif.gif" style="width: 60px;" title="Akun sudah memiliki sertifikat"/> ';
-          }else{
-            echo '<img class="text-center" src="assets/img/error-img.gif" style="width: 60px;" title="Akun belum memiliki sertifikat, silakan laporkan kepada admin"/> ';
-          }
-          ?>
-
-
         </div>
         <!-- /.box-body -->
       </div>

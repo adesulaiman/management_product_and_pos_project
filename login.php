@@ -71,7 +71,6 @@ require "lib/base/db.php";
 
 		.container-login100 {
 			padding: 0px;
-			justify-content: right !important;
 		}
 
 		.dashboardContainer {
@@ -130,7 +129,7 @@ require "lib/base/db.php";
 		}
 
 		@media (max-width: 767px) {
-			
+
 			.dashboardContainer {
 				display: none;
 			}
@@ -167,22 +166,22 @@ require "lib/base/db.php";
 <body>
 
 	<div class="limiter">
-		<div class="container-login100" style="background: url(assets/img/background-login2.jpeg);background-size: cover;">
+		<div class="container-login100" style="background: url(assets/img/background-login4.jpg);background-size: cover;">
 
-			<div class="wrap-login100" style="padding: 0px 40px;float: right;width:520px;height:100vh;background: rgb(6 23 74 / 50%)">
+			<div class="wrap-login100" style="padding: 40px;float: right;width:520px;background: rgb(0 0 0 / 60%)">
 
 
-				<form class="login100-form validate-form login text-center" style="width:100%;margin-top:180px" action="javascript:void(0);">
+				<form class="login100-form validate-form login text-center" style="width:100%;" action="javascript:void(0);">
 					<img src="<?php echo $dir ?>assets/img/logo.png" style="width: 50%;" /><br>
 					<span class="login50-form-title" style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;display: block;color:white;font-family: 'Grand Hotel', cursive;">
-						Sampang Hebat Bermartabat
+						<?php echo $organization ?>
 					</span>
 					<span class="login100-form-title" style="padding-bottom: 5px;color:white;font-size: 20px;    font-family: Cairo;">
 						<?php echo $appname ?>
 					</span>
 
 					<div class="wrap-input100 validate-input form-userid" data-validate="User ID is required">
-						<input class="input100 userid" type="text" name="userid" placeholder="User ID" style="border-radius:5px;color: white;background: rgb(0 0 0 / 30%);">
+						<input class="input100 userid" type="text" name="userid" placeholder="User ID" style="border-radius:5px;color: white;background: rgb(0 0 0 / 80%);">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-user" aria-hidden="true"></i>
@@ -193,7 +192,7 @@ require "lib/base/db.php";
 					if ($login_method == 'otp') {
 						echo '
 						<div class="wrap-input100 validate-input form-pass-otp"  data-validate="Password is required">
-							<input class="input100 pass" type="text" name="otp" placeholder="OTP" style="border-radius:5px;color: white;background: rgb(0 0 0 / 30%);">
+							<input class="input100 pass" type="text" name="otp" placeholder="OTP" style="border-radius:5px;color: white;background: rgb(0 0 0 / 80%);">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
@@ -203,7 +202,7 @@ require "lib/base/db.php";
 					} else if ($login_method == 'password') {
 						echo '
 						<div class="wrap-input100 validate-input form-pass-otp" data-validate="Password is required">
-							<input class="input100 pass" type="password" name="pass" placeholder="Password" style="border-radius:5px;color: white;background: rgb(0 0 0 / 30%);">
+							<input class="input100 pass" type="password" name="pass" placeholder="Password" style="border-radius:5px;color: white;background: rgb(0 0 0 / 80%);">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
@@ -271,12 +270,19 @@ require "lib/base/db.php";
 	<script type="text/javascript">
 		var l = Ladda.create(document.querySelector('.submit'));
 
+		$(document).keypress(function(event) {
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if (keycode == '13') {
+				$('.submit').click();
+			}
+		});
+
 		$('.submit').on('click', function() {
 			l.start();
 
 			var login = $('.login').serialize();
 			$.ajax({
-				url: "./lib/base/login_act.php?"+ login,
+				url: "./lib/base/login_act.php?" + login,
 				dataType: "json",
 				success: function(msg) {
 					popup(msg.status, msg.text, '');

@@ -3,8 +3,9 @@
 $path = "..";
 $dir = 'http://localhost/applications/management_product_and_pos_project/';
 
-$title = "IFM Kabupaten Sampang";
-$appname = "INTEGRASI FILE MANAGER";
+$title = "Management Product and POS System";
+$organization = "Cahaya Emas";
+$appname = "Management Product and POS System";
 $dbName = "u965363723_management";
 $dbUser = "u965363723_superuser";
 $dbPassword = "g2nLV|gG#VU*";
