@@ -4,7 +4,7 @@ require "../../config.php";
 require "../base/db.php";
 require "../base/security_login.php";
 
-
+$nostruk = uniqid();
 ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@ require "../base/security_login.php";
 <style>
   .tableFixHead {
     overflow: auto;
-    height: 300px;
+    height: 430px;
   }
 
   .tableFixHead thead th {
@@ -76,6 +76,20 @@ require "../base/security_login.php";
   .dp-amount {
     display: none;
   }
+
+  .debitNumber,
+  .transferNumber,
+  .creditNumber {
+    display: none;
+  }
+
+  .containerCashAmount,
+  .containerTransferAmount,
+  .containerDebitAmount,
+  .containerCreditAmount,
+  .containerDPAmount {
+    display: none;
+  }
 </style>
 
 
@@ -93,11 +107,11 @@ require "../base/security_login.php";
                     <img src="assets/img/logocashier.png" alt="User Image">
                   </div>
                   <div class="pull-left info">
-                    <p style="font-size: 21px;margin-bottom: 0;color:black">Ade Sulaeman</p>
+                    <p style="font-size: 21px;margin-bottom: 0;color:black"><?php echo $_SESSION['username'] ?></p>
                     <a href="#" style="color:#3c8dbc">Staff Cashier</a>
                   </div>
                   <div style="float:right">
-                    <h4>No Struk : #jkl12jk23l12</h4>
+                    <h4>No Struk : <span class="strukNumber">#stk<?php echo $nostruk ?></span></h4>
                   </div>
                 </div>
 
@@ -106,79 +120,16 @@ require "../base/security_login.php";
                   <table class="table table-striped" style="font-family: 'Patua One', cursive; ">
                     <thead>
                       <tr>
+                        <th style="width: 10px;">Action</th>
                         <th>Product Name</th>
                         <th>Product Code</th>
-                        <th>Qty</th>
-                        <th>Gram</th>
-                        <th>Price</th>
+                        <th style="width: 100px;">Gram</th>
+                        <th style="width: 90px;">Qty</th>
+                        <th>@ Price</th>
                         <th>Total</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>Cicin A1 Kadar 30 karat sdhjaks d sdklajkd jsakdj </td>
-                        <td>728197891</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
-                      <tr>
-                        <td>728197891</td>
-                        <td>Cicin A1 Kadar 30 karat</td>
-                        <td>12</td>
-                        <td>2.782</td>
-                        <td>10.000.000</td>
-                        <td>24.000.000.000</td>
-                      </tr>
+                    <tbody class="bodyRawTable">
                     </tbody>
                   </table>
 
@@ -187,23 +138,43 @@ require "../base/security_login.php";
 
                 <div class="totalContainer col-md-12">
                   <h2 style="float: left;">Total</h2>
-                  <h2 style="float: right;">Rp 452.231.000</h2>
+                  <h2 style="float: right;" class="totalAllAmount">Rp 0</h2>
                 </div>
 
                 <div class="totalChange col-md-12">
                   <h4 style="float: left;">Payment Method</h4>
-                  <h4 style="float: right;">Cash / Debit</h4>
+                  <h4 style="float: right;" class="paymentMethod">-</h4>
                 </div>
 
-                <div class="totalChange col-md-12">
-                  <h4 style="float: left;">Payment</h4>
-                  <h4 style="float: right;">Rp 452.231.000</h4>
+                <div class="totalChange col-md-12 containerCashAmount">
+                  <h4 style="float: left;">Cash Amount</h4>
+                  <h4 style="float: right;" class="cashAmount">Rp 0</h4>
+                </div>
+
+                <div class="totalChange col-md-12 containerTransferAmount">
+                  <h4 style="float: left;">Transfer Amount</h4>
+                  <h4 style="float: right;" class="transferAmount">Rp 0</h4>
+                </div>
+
+                <div class="totalChange col-md-12 containerDebitAmount">
+                  <h4 style="float: left;">Debit Amount</h4>
+                  <h4 style="float: right;" class="debitAmount">Rp 0</h4>
+                </div>
+
+                <div class="totalChange col-md-12 containerCreditAmount">
+                  <h4 style="float: left;">Credit Amount</h4>
+                  <h4 style="float: right;" class="creditAmount">Rp 0</h4>
+                </div>
+
+                <div class="totalChange col-md-12 containerDPAmount">
+                  <h4 style="float: left;">DP Amount</h4>
+                  <h4 style="float: right;" class="dpAmount">Rp 0</h4>
                 </div>
 
 
                 <div class="totalChange col-md-12">
                   <h4 style="float: left;">Change</h4>
-                  <h4 style="float: right;">Rp 40.000</h4>
+                  <h4 style="float: right;color:green;font-weight:bolder" class="change">Rp 0</h4>
                 </div>
 
 
@@ -214,25 +185,18 @@ require "../base/security_login.php";
               <div class="col-md-12">
                 <label>Add Product</label>
                 <div class="input-group input-group-sm inputScanner">
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control inputProductScanner" maxlength="13" , placeholder="ex : 128i17uxj2123">
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-success btn-flat"><i class="fa fa-fw fa-plus-square"></i> Add</button>
                     <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
                   </span>
                 </div>
 
                 <div class="input-group input-group-sm inputManual" style="display: none;">
-                  <select class="form-control select2" style="width: 100%;">
-                    <option selected="selected">Alabama</option>
-                    <option>Alaska</option>
-                    <option>California</option>
-                    <option>Delaware</option>
-                    <option>Tennessee</option>
-                    <option>Texas</option>
-                    <option>Washington</option>
+                  <select class="form-control select2 inputProductManual" style="width: 100%;">
+                    <option value="">-- Cari Product --</option>
                   </select>
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-success btn-flat"><i class="fa fa-fw fa-plus-square"></i> Add</button>
+                    <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-plus-square"></i> Add</button>
                     <button type="button" class="btn btn-danger btn-flat closeSearch"><i class="fa fa-close"></i> Close</button>
                   </span>
                 </div>
@@ -249,7 +213,7 @@ require "../base/security_login.php";
                 <button class="btn btn-default btntransaksi" data-id="dp"><i class="fa fa-fw fa-money"></i> DP</button>
               </div>
 
-              <div class="col-md-12" style="height: 230px;">
+              <div class="col-md-12" style="height: 280px;">
                 <label style="margin-top: 30px;">Payment</label>
                 <div class="col-md-12 cash-amount">
                   <div class="form-group">
@@ -258,7 +222,7 @@ require "../base/security_login.php";
                     <div class="col-sm-8">
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
-                        <input type="text" class="form-control">
+                        <input type="number" class="form-control inputCashAmount">
                       </div>
                     </div>
                   </div>
@@ -270,7 +234,7 @@ require "../base/security_login.php";
                     <div class="col-sm-8">
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
-                        <input type="text" class="form-control">
+                        <input type="number" class="form-control inputTransferAmount">
                       </div>
                     </div>
                   </div>
@@ -282,7 +246,7 @@ require "../base/security_login.php";
                     <div class="col-sm-8">
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
-                        <input type="text" class="form-control">
+                        <input type="number" class="form-control inputDebitAmount">
                       </div>
                     </div>
                   </div>
@@ -294,7 +258,7 @@ require "../base/security_login.php";
                     <div class="col-sm-8">
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
-                        <input type="text" class="form-control">
+                        <input type="number" class="form-control inputCreditAmount">
                       </div>
                     </div>
                   </div>
@@ -306,8 +270,43 @@ require "../base/security_login.php";
                     <div class="col-sm-8">
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
-                        <input type="text" class="form-control">
+                        <input type="number" class="form-control inputDPAmount">
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12" style="height: 120px;">
+                <div class="form-group transferNumber">
+                  <label for="inputEmail3" class="col-sm-4 control-label" style="margin-top: 7px;">Transfer Account Number</label>
+
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-fw fa-exchange"></i></span>
+                      <input type="text" class="form-control inputTransferNumber">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group debitNumber">
+                  <label for="inputEmail3" class="col-sm-4 control-label" style="margin-top: 7px;">Debit Number</label>
+
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-fw fa-credit-card"></i></span>
+                      <input type="text" class="form-control inputDebitNumber">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group creditNumber">
+                  <label for="inputEmail3" class="col-sm-4 control-label" style="margin-top: 7px;">Credit Number</label>
+
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-fw fa-credit-card"></i></span>
+                      <input type="text" class="form-control inputCreditNumber">
                     </div>
                   </div>
                 </div>
@@ -328,9 +327,33 @@ require "../base/security_login.php";
 </section>
 
 <script>
+  var vListProduct = {};
+
+
   $("body").addClass("sidebar-collapse");
 
-  $(".select2").select2();
+  $(".inputProductScanner").focus();
+
+  function format(n, sep, decimals) {
+    sep = sep || "."; // Default to period as decimal separator
+    decimals = decimals || 2; // Default to 2 decimals
+
+    return n.toLocaleString().split(sep)[0] +
+      sep +
+      n.toFixed(decimals).split(sep)[1];
+  }
+
+  $(".select2").select2({
+    ajax: {
+      url: './lib/base/select_data.php?t=vw_select_product&filter=all',
+      dataType: 'json',
+      data: function(params) {
+        return {
+          search: params.term
+        };
+      }
+    }
+  });
 
   $(".searchProduct").on("click", function() {
     $(".inputScanner").css("display", "none");
@@ -342,32 +365,151 @@ require "../base/security_login.php";
     $(".inputManual").css("display", "none");
   });
 
+  $(".inputCashAmount").on("keyup", function() {
+    let value = $(this).val();
+    $(".cashAmount").html("Rp " + format(Number(value)));
+
+    var getTotalAmount = $(".totalAllAmount").html();
+    var getTotalPayment = Number($(".inputDPAmount").val()) +
+      Number($(".inputCreditAmount").val()) +
+      Number($(".inputTransferAmount").val()) +
+      Number($(".inputDebitAmount").val()) +
+      Number($(".inputCashAmount").val());
+
+    getTotalAmount = getTotalAmount.replaceAll("Rp ", "");
+    getTotalAmount = getTotalAmount.replaceAll(",", "");
+    getTotalAmount = Number(getTotalAmount);
+    var changeAmount = getTotalPayment - getTotalAmount;
+    $(".change").html("Rp " + format(changeAmount));
+  });
+
+  $(".inputTransferAmount").on("keyup", function() {
+    let value = $(this).val();
+    $(".transferAmount").html("Rp " + format(Number(value)));
+
+    var getTotalAmount = $(".totalAllAmount").html();
+    var getTotalPayment = Number($(".inputDPAmount").val()) +
+      Number($(".inputCreditAmount").val()) +
+      Number($(".inputTransferAmount").val()) +
+      Number($(".inputDebitAmount").val()) +
+      Number($(".inputCashAmount").val());
+
+    getTotalAmount = getTotalAmount.replaceAll("Rp ", "");
+    getTotalAmount = getTotalAmount.replaceAll(",", "");
+    getTotalAmount = Number(getTotalAmount);
+    var changeAmount = getTotalPayment - getTotalAmount;
+    $(".change").html("Rp " + format(changeAmount));
+  });
+
+  $(".inputDebitAmount").on("keyup", function() {
+    let value = $(this).val();
+    $(".debitAmount").html("Rp " + format(Number(value)));
+
+    var getTotalAmount = $(".totalAllAmount").html();
+    var getTotalPayment = Number($(".inputDPAmount").val()) +
+      Number($(".inputCreditAmount").val()) +
+      Number($(".inputTransferAmount").val()) +
+      Number($(".inputDebitAmount").val()) +
+      Number($(".inputCashAmount").val());
+
+    getTotalAmount = getTotalAmount.replaceAll("Rp ", "");
+    getTotalAmount = getTotalAmount.replaceAll(",", "");
+    getTotalAmount = Number(getTotalAmount);
+    var changeAmount = getTotalPayment - getTotalAmount;
+    $(".change").html("Rp " + format(changeAmount));
+  });
+
+  $(".inputCreditAmount").on("keyup", function() {
+    let value = $(this).val();
+    $(".creditAmount").html("Rp " + format(Number(value)));
+
+    var getTotalAmount = $(".totalAllAmount").html();
+    var getTotalPayment = Number($(".inputDPAmount").val()) +
+      Number($(".inputCreditAmount").val()) +
+      Number($(".inputTransferAmount").val()) +
+      Number($(".inputDebitAmount").val()) +
+      Number($(".inputCashAmount").val());
+
+    getTotalAmount = getTotalAmount.replaceAll("Rp ", "");
+    getTotalAmount = getTotalAmount.replaceAll(",", "");
+    getTotalAmount = Number(getTotalAmount);
+    var changeAmount = getTotalPayment - getTotalAmount;
+    $(".change").html("Rp " + format(changeAmount));
+  });
+
+  $(".inputDPAmount").on("keyup", function() {
+    let value = $(this).val();
+    $(".dpAmount").html("Rp " + format(Number(value)));
+
+    var getTotalAmount = $(".totalAllAmount").html();
+    var getTotalPayment = Number($(".inputDPAmount").val()) +
+      Number($(".inputCreditAmount").val()) +
+      Number($(".inputTransferAmount").val()) +
+      Number($(".inputDebitAmount").val()) +
+      Number($(".inputCashAmount").val());
+
+    getTotalAmount = getTotalAmount.replaceAll("Rp ", "");
+    getTotalAmount = getTotalAmount.replaceAll(",", "");
+    getTotalAmount = Number(getTotalAmount);
+    var changeAmount = getTotalPayment - getTotalAmount;
+    $(".change").html("Rp " + format(changeAmount));
+
+
+  });
+
+
+
+  var typePayment = [];
+
   $(".btntransaksi").on("click", function() {
 
     let selected = $(this).data("select");
     let type = $(this).data("id");
+
+
     if (selected == "1") {
       $(this).removeClass("btn-info");
       $(this).addClass("btn-default");
 
       if (type == 'cash') {
+        typePayment.splice(typePayment.indexOf('Cash'), 1);
         $(".cash-amount").css("display", "none");
+        $(".inputCashAmount").val(null);
+        $(".containerCashAmount").css("display", "none");
       }
 
       if (type == 'transfer') {
+        typePayment.splice(typePayment.indexOf('Transfer'), 1);
         $(".transfer-amount").css("display", "none");
+        $(".transferNumber").css("display", "none");
+        $(".inputTransferNumber").val(null);
+        $(".inputTransferAmount").val(null);
+        $(".containerTransferAmount").css("display", "none");
       }
 
       if (type == 'debit') {
+        typePayment.splice(typePayment.indexOf('Debit'), 1);
         $(".debit-amount").css("display", "none");
+        $(".debitNumber").css("display", "none");
+        $(".inputDebitNumber").val(null);
+        $(".inputDebitAmount").val(null);
+        $(".containerDebitAmount").css("display", "none");
       }
 
       if (type == 'credit') {
+        typePayment.splice(typePayment.indexOf('Credit'), 1);
+        $(".creditNumber").css("display", "none");
+        $(".inputCreditNumber").val(null);
         $(".credit-amount").css("display", "none");
+        $(".inputCreditAmount").val(null);
+        $(".containerCreditAmount").css("display", "none");
       }
 
       if (type == 'dp') {
+        typePayment.splice(typePayment.indexOf('DP'), 1);
         $(".dp-amount").css("display", "none");
+        $(".inputDPAmount").val(null);
+        $(".containerDPAmount").css("display", "none");
       }
 
       $(this).data("select", "0");
@@ -376,27 +518,279 @@ require "../base/security_login.php";
       $(this).addClass("btn-info");
 
       if (type == 'cash') {
+        typePayment.push("Cash");
         $(".cash-amount").css("display", "block");
+        $(".containerCashAmount").css("display", "block");
       }
 
       if (type == 'transfer') {
+        typePayment.push("Transfer");
+        $(".transferNumber").css("display", "block");
         $(".transfer-amount").css("display", "block");
+        $(".containerTransferAmount").css("display", "block");
       }
 
       if (type == 'debit') {
+        typePayment.push("Debit");
+        $(".debitNumber").css("display", "block");
         $(".debit-amount").css("display", "block");
+        $(".containerDebitAmount").css("display", "block");
       }
 
       if (type == 'credit') {
+        typePayment.push("Credit");
+        $(".creditNumber").css("display", "block");
         $(".credit-amount").css("display", "block");
+        $(".containerCreditAmount").css("display", "block");
       }
 
       if (type == 'dp') {
+        typePayment.push("DP");
         $(".dp-amount").css("display", "block");
+        $(".containerDPAmount").css("display", "block");
       }
 
       $(this).data("select", "1");
     }
 
+    $(".paymentMethod").html(typePayment.join(" & "));
+
   });
+
+
+  $(".addManual").on("click", function() {
+    var getBarcode = $(".inputProductManual").val();
+    var dataForm = {
+      "barcode": getBarcode
+    };
+    if (getBarcode != "") {
+      getProduct(dataForm);
+    } else {
+      popup("error", "Barcode must fill !!");
+    }
+  });
+
+  $(".inputProductScanner").on("keyup", function() {
+    var value = $(this).val();
+    if (value.length == 13) {
+      $(this).blur();
+    }
+  });
+
+  $(".inputProductScanner").on("focusout", function() {
+    var getBarcode = $(this).val();
+    var dataForm = {
+      "barcode": getBarcode
+    };
+    if (getBarcode != "") {
+      getProduct(dataForm);
+    }
+
+    $(this).val(null);
+  });
+
+  $(".btnPay").on("click", function() {
+
+    if (!jQuery.isEmptyObject(vListProduct)) {
+      swal({
+          title: "Commit trancation ?",
+          text: "Once commit transaction, you will not be able to back this transaction !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willtransaction) => {
+          if (willtransaction) {
+            $("#loading").removeClass("hide");
+
+            var inputAmount = {};
+            var cardNo = {
+              "inputTransferNumber": $(".inputTransferNumber").val(),
+              "inputDebitNumber": $(".inputDebitNumber").val(),
+              "inputCreditNumber": $(".inputCreditNumber").val()
+            };
+
+            $.each(typePayment, function(idx, val) {
+              inputAmount[val] = $(".input" + val + "Amount").val();
+            });
+
+            var dataTransaction = {
+              "payment": inputAmount,
+              "typePayment": typePayment.join(" and "),
+              "cardNo": cardNo,
+              "vListProduct": vListProduct,
+              "nostruk": "#stk<?php echo $nostruk ?>"
+            };
+
+            $.ajax({
+              method: "POST",
+              url: "./lib/base/commit_transaction.php",
+              data: dataTransaction,
+              dataType: 'json',
+              success: function(msg) {
+                $("#loading").addClass("hide");
+
+                if (msg.status == 'success') {
+                  swal(msg.info, {
+                    icon: "success",
+                  }).then((value) => {
+                    HtmlLoad('./lib/base/cashier.php?f=13', 'Cashier');
+                  });
+                } else {
+                  popup("error", msg.info);
+                }
+
+              },
+              error: function(msg) {
+                console.log(msg);
+                popup("error", "Error system !!");
+              },
+            });
+
+
+
+
+          }
+        });
+    } else {
+      popup("error", "Please create transaction !!");
+    }
+
+
+  });
+
+
+
+
+  function getProduct(dataForm) {
+    $.ajax({
+      method: "POST",
+      url: "./lib/base/getproduct.php",
+      data: dataForm,
+      dataType: 'json',
+      success: function(msg) {
+
+
+        if (msg.status == "success") {
+
+          var uniqid = Math.floor(Math.random() * 1000000);
+
+
+          vListProduct[uniqid] = {
+            "productName": msg.product[0].product_name,
+            "barcode": msg.product[0].barcode,
+            "gram": msg.product[0].gram,
+            "qty": 1,
+            "price": msg.product[0].sell_price
+          };
+
+          var template = `<tr>
+                        <td><button class="btn btn-danger btn-xs btn-delete-item" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button></td>
+                        <td>` + msg.product[0].product_name + ` (` + msg.product[0].kadar_product + ` karat)</td>
+                        <td>` + msg.product[0].barcode + `</td>
+                        <td>` + msg.product[0].gram + `</td>
+                        <td><input type="number" class="form-control input-sm qtyInput qty` + uniqid + `" data-id="` + uniqid + `" value="1"></td>
+                        <td><input type="number" class="form-control input-sm priceInput price` + uniqid + `" data-id="` + uniqid + `" value="` + msg.product[0].sell_price + `"></td>
+                        <td><span class="totalInput` + uniqid + ` totalPrice">` + format(Number(msg.product[0].sell_price)) + `</span></td>
+                      </tr>`;
+          $(".bodyRawTable").append(template);
+
+
+          $(".btn-delete-item").on("click", function() {
+            let id = $(this).data("id");
+            delete vListProduct[id];
+            var cek = $(this).parent("td").parent("tr").remove();
+
+            var totalAll = 0;
+            $('.totalPrice').each(function() {
+              totalAll += Number($(this).html().replaceAll(",", ""))
+            });
+            $(".totalAllAmount").html("Rp " + format(totalAll));
+          });
+
+
+          $(".qtyInput").on("click", function() {
+            // Select the text field
+            var focusgram = $(this);
+            focusgram.select();
+          });
+
+          $(".priceInput").on("focusout", function() {
+            // Select the text field
+            var id = $(this).data("id");
+            var qty = $(".qty" + id).val();
+            var price = $(".price" + id).val();
+
+            vListProduct[id]['qty'] = qty;
+            vListProduct[id]['price'] = price;
+
+            var total = qty * price;
+            $(".totalInput" + id).html(format(total));
+
+            var totalAll = 0;
+            $('.totalPrice').each(function() {
+              totalAll += Number($(this).html().replaceAll(",", ""))
+            });
+            $(".totalAllAmount").html("Rp " + format(totalAll));
+          });
+
+          $(".qtyInput").on("focusout", function() {
+            // Select the text field
+            var id = $(this).data("id");
+            var qty = $(".qty" + id).val();
+            var price = $(".price" + id).val();
+
+            vListProduct[id]['qty'] = qty;
+            vListProduct[id]['price'] = price;
+
+            var total = qty * price;
+            $(".totalInput" + id).html(format(total));
+
+            var totalAll = 0;
+            $('.totalPrice').each(function() {
+              totalAll += Number($(this).html().replaceAll(",", ""))
+            });
+            $(".totalAllAmount").html("Rp " + format(totalAll));
+          });
+
+          $(".priceInput").on("click", function() {
+            // Select the text field
+            var focusgram = $(this);
+            focusgram.select();
+          });
+
+          $('.qtyInput').on('keypress', function(e) {
+            if (e.which === 13) {
+              $(this).blur();
+            }
+          });
+
+          $('.priceInput').on('keypress', function(e) {
+            if (e.which === 13) {
+              $(this).blur();
+            }
+          });
+
+          var totalAll = 0;
+          $('.totalPrice').each(function() {
+            totalAll += Number($(this).html().replaceAll(",", ""))
+          });
+          $(".totalAllAmount").html("Rp " + format(totalAll));
+          popup('success', msg.info, '');
+
+          $(".inputProductScanner").val(null);
+          $(".inputProductScanner").focus();
+
+
+        } else {
+          popup('error', msg.info, '');
+        }
+
+      },
+      error: function(err) {
+        console.log(err);
+        popup('error', err.responseText, '');
+      }
+    });
+  }
 </script>

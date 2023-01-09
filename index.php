@@ -22,7 +22,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><?php echo $title ?></title>
-  <link rel="icon" type="image/png" href="<?php echo $dir ?>assets/img/logo.png" />
+  <link rel="icon" type="image/png" href="<?php echo $dir ?>assets/img/logo.png?v=1" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -82,7 +82,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
   <!-- jQuery 2.2.3 -->
   <script src="<?php echo $dir ?>plugins/jQuery/jquery-2.2.3.min.js"></script>
   <script type="text/javascript" src="<?php echo $dir ?>plugins/toater/toastr.min.js"></script>
-  <script type="text/javascript" src="<?php echo $dir ?>plugins/dist/js/function.js?v=7"></script>
+  <script type="text/javascript" src="<?php echo $dir ?>plugins/dist/js/function.js?v=8"></script>
   <!-- Autocomplate -->
   <script src="<?php echo $dir ?>plugins/autocomplate/jquery.mockjax.js"></script>
   <script src="<?php echo $dir ?>plugins/autocomplate/jquery.autocomplete.js"></script>
@@ -361,6 +361,8 @@ $getGroup = $adeQ->select($adeQ->prepare(
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 
     <script>
@@ -488,7 +490,6 @@ $getGroup = $adeQ->select($adeQ->prepare(
           method: "POST",
           url: "./lib/base/load_menu.php",
           success: function(msg) {
-            console.log(msg);
             var jsonstr = msg;
             //console.log(JSON.parse(jsonstr));
             $("#sidebarmenu").html("");
