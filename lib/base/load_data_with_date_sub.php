@@ -36,6 +36,7 @@ if(isset($_SESSION['userid']))
 		
 
 		## Total number of records without filtering
+		
 		$sel = $adeQ->select("select count(*) as allcount from $t $where");
 		$totalRecords = $sel[0]['allcount'];
 

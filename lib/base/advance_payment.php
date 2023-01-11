@@ -3,8 +3,6 @@
 require "../../config.php";
 require "../base/db.php";
 require "../base/security_login.php";
-
-$nostruk = uniqid();
 ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,8 +109,8 @@ $nostruk = uniqid();
                     <a href="#" style="color:#3c8dbc">Staff Cashier</a>
                   </div>
                   <div style="float:right">
-                    <h4>Bill No : &ensp;<span style="float: right;" class="strukNumber">stk<?php echo $nostruk ?></span></h4>
-                    <h5>Date : &nbsp;<span style="float: right;"><?php echo date("d F Y") ?></span></h5>
+                    <h4>Bill No : &ensp;<span style="float:right" class="strukNumber">-</span></h4>
+                    <h5>Date : &nbsp;<span style="float:right" class="dateTransaksi">-</span></h5>
                   </div>
                 </div>
 
@@ -121,9 +119,8 @@ $nostruk = uniqid();
                   <table class="table table-striped" style="font-family: 'Patua One', cursive; ">
                     <thead>
                       <tr>
-                        <th style="width: 10px;">Action</th>
                         <th>Product Name</th>
-                        <th style="width: 150px;">Product Code</th>
+                        <th>Product Code</th>
                         <th style="width: 100px;">Gram</th>
                         <th style="width: 90px;">Qty</th>
                         <th>@ Price</th>
@@ -142,40 +139,40 @@ $nostruk = uniqid();
                   <h2 style="float: right;" class="totalAllAmount">Rp 0</h2>
                 </div>
 
-                <div class="totalChange col-md-12">
+                <div class="col-md-12">
                   <h4 style="float: left;">Payment Method</h4>
                   <h4 style="float: right;" class="paymentMethod">-</h4>
                 </div>
 
-                <div class="totalChange col-md-12 containerCashAmount">
+                <div class=" col-md-12 containerCashAmount">
                   <h4 style="float: left;">Cash Amount</h4>
                   <h4 style="float: right;" class="cashAmount">Rp 0</h4>
                 </div>
 
-                <div class="totalChange col-md-12 containerTransferAmount">
+                <div class=" col-md-12 containerTransferAmount">
                   <h4 style="float: left;">Transfer Amount</h4>
                   <h4 style="float: right;" class="transferAmount">Rp 0</h4>
                 </div>
 
-                <div class="totalChange col-md-12 containerDebitAmount">
+                <div class=" col-md-12 containerDebitAmount">
                   <h4 style="float: left;">Debit Amount</h4>
                   <h4 style="float: right;" class="debitAmount">Rp 0</h4>
                 </div>
 
-                <div class="totalChange col-md-12 containerCreditAmount">
+                <div class=" col-md-12 containerCreditAmount">
                   <h4 style="float: left;">Credit Amount</h4>
                   <h4 style="float: right;" class="creditAmount">Rp 0</h4>
                 </div>
 
-                <div class="totalChange col-md-12 containerDPAmount">
+                <div class=" col-md-12 containerDPAmount">
                   <h4 style="float: left;">DP Amount</h4>
                   <h4 style="float: right;" class="dpAmount">Rp 0</h4>
                 </div>
 
 
                 <div class="totalChange col-md-12">
-                  <h4 style="float: left;">Change</h4>
-                  <h4 style="float: right;color:green;font-weight:bolder" class="change">Rp 0</h4>
+                  <h4 style="float: left;">Remaining Payment</h4>
+                  <h4 style="float: right;color:red;font-weight:bolder" class="change">Rp 0</h4>
                 </div>
 
 
@@ -184,21 +181,13 @@ $nostruk = uniqid();
 
             <div class="col-md-5" style="margin-top:20px">
               <div class="col-md-12">
-                <label>Add Product</label>
-                <div class="input-group input-group-sm inputScanner">
-                  <input type="text" class="form-control inputProductScanner" maxlength="13" , placeholder="ex : 128i17uxj2123">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
-                  </span>
-                </div>
-
-                <div class="input-group input-group-sm inputManual" style="display: none;">
+                <label>No Bill</label>
+                <div class="input-group input-group-sm inputManual">
                   <select class="form-control select2 inputProductManual" style="width: 100%;">
-                    <option value="">-- Find Product --</option>
+                    <option value="">-- Find Bill --</option>
                   </select>
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-plus-square"></i> Add</button>
-                    <button type="button" class="btn btn-danger btn-flat closeSearch"><i class="fa fa-close"></i> Close</button>
+                    <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-search"></i> Show</button>
                   </span>
                 </div>
               </div>
@@ -211,7 +200,6 @@ $nostruk = uniqid();
                 <button class="btn btn-default btntransaksi" data-id="transfer"><i class="fa fa-fw fa-exchange"></i> Transfer</button>
                 <button class="btn btn-default btntransaksi" data-id="debit"><i class="fa fa-fw fa-credit-card"></i> Debit</button>
                 <button class="btn btn-default btntransaksi" data-id="credit"><i class="fa fa-fw fa-credit-card"></i> Credit</button>
-                <button class="btn btn-default btntransaksi" data-id="dp"><i class="fa fa-fw fa-money"></i> DP</button>
               </div>
 
               <div class="col-md-12" style="height: 280px;">
@@ -260,18 +248,6 @@ $nostruk = uniqid();
                       <div class="input-group">
                         <span class="input-group-addon">Rp</span>
                         <input type="number" class="form-control inputCreditAmount">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-12 dp-amount">
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-4 control-label" style="margin-top: 7px;">DP Amount</label>
-
-                    <div class="col-sm-8">
-                      <div class="input-group">
-                        <span class="input-group-addon">Rp</span>
-                        <input type="number" class="form-control inputDPAmount">
                       </div>
                     </div>
                   </div>
@@ -327,35 +303,13 @@ $nostruk = uniqid();
   </div>
 </section>
 
-<!-- Modal Add New Data -->
-<div class="modal fade" id="ModalChooseStorage" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-xs" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Select Storage Product</h4>
-      </div>
-      <div class="modal-body">
-        <div class="box-body">
-          <select class="form-control selectStorage" style="width: 100%;">
-
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer modalbtn">
-
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
   var vListProduct = {};
 
-
+  
   $("body").addClass("sidebar-collapse");
-
-  $(".inputProductScanner").focus();
+  var paymentdp = 0;
+  var nostruk = "";
 
   function format(n, sep, decimals) {
     sep = sep || "."; // Default to period as decimal separator
@@ -368,7 +322,7 @@ $nostruk = uniqid();
 
   $(".select2").select2({
     ajax: {
-      url: './lib/base/select_data.php?t=vw_select_product&filter=all',
+      url: './lib/base/select_data.php?t=select_vw_dp&filter=all',
       dataType: 'json',
       data: function(params) {
         return {
@@ -393,7 +347,7 @@ $nostruk = uniqid();
     $(".cashAmount").html("Rp " + format(Number(value)));
 
     var getTotalAmount = $(".totalAllAmount").html();
-    var getTotalPayment = Number($(".inputDPAmount").val()) +
+    var getTotalPayment = Number(paymentdp) +
       Number($(".inputCreditAmount").val()) +
       Number($(".inputTransferAmount").val()) +
       Number($(".inputDebitAmount").val()) +
@@ -403,6 +357,13 @@ $nostruk = uniqid();
     getTotalAmount = getTotalAmount.replaceAll(",", "");
     getTotalAmount = Number(getTotalAmount);
     var changeAmount = getTotalPayment - getTotalAmount;
+
+    if(changeAmount >= 0 ){
+      $(".change").css("color", "green");  
+    }else{
+      $(".change").css("color", "red");
+    }
+
     $(".change").html("Rp " + format(changeAmount));
   });
 
@@ -411,7 +372,7 @@ $nostruk = uniqid();
     $(".transferAmount").html("Rp " + format(Number(value)));
 
     var getTotalAmount = $(".totalAllAmount").html();
-    var getTotalPayment = Number($(".inputDPAmount").val()) +
+    var getTotalPayment = Number(paymentdp)  +
       Number($(".inputCreditAmount").val()) +
       Number($(".inputTransferAmount").val()) +
       Number($(".inputDebitAmount").val()) +
@@ -421,6 +382,12 @@ $nostruk = uniqid();
     getTotalAmount = getTotalAmount.replaceAll(",", "");
     getTotalAmount = Number(getTotalAmount);
     var changeAmount = getTotalPayment - getTotalAmount;
+    if(changeAmount >= 0 ){
+      $(".change").css("color", "green");  
+    }else{
+      $(".change").css("color", "red");
+    }
+
     $(".change").html("Rp " + format(changeAmount));
   });
 
@@ -429,7 +396,7 @@ $nostruk = uniqid();
     $(".debitAmount").html("Rp " + format(Number(value)));
 
     var getTotalAmount = $(".totalAllAmount").html();
-    var getTotalPayment = Number($(".inputDPAmount").val()) +
+    var getTotalPayment = Number(paymentdp)  +
       Number($(".inputCreditAmount").val()) +
       Number($(".inputTransferAmount").val()) +
       Number($(".inputDebitAmount").val()) +
@@ -439,6 +406,12 @@ $nostruk = uniqid();
     getTotalAmount = getTotalAmount.replaceAll(",", "");
     getTotalAmount = Number(getTotalAmount);
     var changeAmount = getTotalPayment - getTotalAmount;
+
+    if(changeAmount >= 0 ){
+      $(".change").css("color", "green");  
+    }else{
+      $(".change").css("color", "red");
+    }
     $(".change").html("Rp " + format(changeAmount));
   });
 
@@ -447,7 +420,7 @@ $nostruk = uniqid();
     $(".creditAmount").html("Rp " + format(Number(value)));
 
     var getTotalAmount = $(".totalAllAmount").html();
-    var getTotalPayment = Number($(".inputDPAmount").val()) +
+    var getTotalPayment = Number(paymentdp)  +
       Number($(".inputCreditAmount").val()) +
       Number($(".inputTransferAmount").val()) +
       Number($(".inputDebitAmount").val()) +
@@ -457,6 +430,12 @@ $nostruk = uniqid();
     getTotalAmount = getTotalAmount.replaceAll(",", "");
     getTotalAmount = Number(getTotalAmount);
     var changeAmount = getTotalPayment - getTotalAmount;
+
+    if(changeAmount >= 0 ){
+      $(".change").css("color", "green");  
+    }else{
+      $(".change").css("color", "red");
+    }
     $(".change").html("Rp " + format(changeAmount));
   });
 
@@ -465,7 +444,7 @@ $nostruk = uniqid();
     $(".dpAmount").html("Rp " + format(Number(value)));
 
     var getTotalAmount = $(".totalAllAmount").html();
-    var getTotalPayment = Number($(".inputDPAmount").val()) +
+    var getTotalPayment = Number(paymentdp)  +
       Number($(".inputCreditAmount").val()) +
       Number($(".inputTransferAmount").val()) +
       Number($(".inputDebitAmount").val()) +
@@ -584,7 +563,7 @@ $nostruk = uniqid();
   $(".addManual").on("click", function() {
     var getBarcode = $(".inputProductManual").val();
     var dataForm = {
-      "barcode": getBarcode
+      "nostruk": getBarcode
     };
     if (getBarcode != "") {
       getProduct(dataForm);
@@ -593,28 +572,8 @@ $nostruk = uniqid();
     }
   });
 
-  $(".inputProductScanner").on("keyup", function() {
-    var value = $(this).val();
-    if (value.length == 13) {
-      $(this).blur();
-    }
-  });
-
-  $(".inputProductScanner").on("focusout", function() {
-    var getBarcode = $(this).val();
-    var dataForm = {
-      "barcode": getBarcode
-    };
-    if (getBarcode != "") {
-      getProduct(dataForm);
-    }
-
-    $(this).val(null);
-  });
-
   $(".btnPay").on("click", function() {
 
-    if (!jQuery.isEmptyObject(vListProduct)) {
       swal({
           title: "Commit trancation ?",
           text: "Once commit transaction, you will not be able to back this transaction !",
@@ -641,9 +600,8 @@ $nostruk = uniqid();
               "payment": inputAmount,
               "typePayment": typePayment.join(" and "),
               "cardNo": cardNo,
-              "vListProduct": vListProduct,
-              "nostruk": "stk<?php echo $nostruk ?>",
-              "method": "cashier"
+              "nostruk": nostruk,
+              "method" : "pelunasandp" 
             };
 
             $.ajax({
@@ -658,7 +616,7 @@ $nostruk = uniqid();
                   swal(msg.info, {
                     icon: "success",
                   }).then((value) => {
-                    HtmlLoad('./lib/base/cashier.php?f=13', 'Cashier');
+                    HtmlLoad('./lib/base/advance_payment.php?f=13', 'Cashier');
                   });
                 } else {
                   popup("error", msg.info);
@@ -676,165 +634,73 @@ $nostruk = uniqid();
 
           }
         });
-    } else {
-      popup("error", "Please create transaction !!");
-    }
+    
 
 
   });
 
 
 
-  function getProduct(dataForm) {
 
+  function getProduct(dataForm) {
+    $("#loading").removeClass("hide");
     $.ajax({
       method: "POST",
-      url: "./lib/base/getproduct.php",
+      url: "./lib/base/getDetailTransaksi.php",
       data: dataForm,
       dataType: 'json',
       success: function(msg) {
 
+        $(".bodyRawTable").html(null);
 
         if (msg.status == "success") {
 
-          $("#ModalChooseStorage").modal("show");
-          $(".modalbtn").html(`
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="btnConfirm">Confirm</button>
-          `);
-
-          var selectboxStorage = "";
-          $.each(msg.product, function(idx, val) {
-            selectboxStorage += "<option value='" + idx + "'>" + val.storage_name + "</option>"
-          });
-
-          $(".selectStorage").html(selectboxStorage);
-
-          $("#btnConfirm").on("click", function() {
-
-            $("#ModalChooseStorage").modal("hide");
-            var selectStorage = $(".selectStorage").val();
-
-            var uniqid = Math.floor(Math.random() * 1000000);
+          var uniqid = Math.floor(Math.random() * 1000000);
 
 
-            vListProduct[uniqid] = {
-              "productName": msg.product[selectStorage].product_name,
-              "barcode": msg.product[selectStorage].uniq_barcode,
-              "gram": msg.product[selectStorage].gram,
-              "qty": 1,
-              "price": msg.product[selectStorage].sell_price
-            };
-
+          $.each(msg.data_detail_sales, function(idx, val) {
+   
             var template = `<tr>
-                        <td><button class="btn btn-danger btn-xs btn-delete-item" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button></td>
-                        <td>` + msg.product[selectStorage].product_name + ` (` + msg.product[selectStorage].kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">`+msg.product[selectStorage].storage_name+`</small></td>
-                        <td>` + msg.product[selectStorage].uniq_barcode + `</td>
-                        <td>` + msg.product[selectStorage].gram + `</td>
-                        <td><input type="number" class="form-control input-sm qtyInput qty` + uniqid + `" data-id="` + uniqid + `" value="1"></td>
-                        <td><input type="number" class="form-control input-sm priceInput price` + uniqid + `" data-id="` + uniqid + `" value="` + msg.product[selectStorage].sell_price + `"></td>
-                        <td><span class="totalInput` + uniqid + ` totalPrice">` + format(Number(msg.product[selectStorage].sell_price)) + `</span></td>
+                        <td>` + val.product_name + ` (` + val.kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">`+val.storage_name+`</small></td>
+                        <td>`+val.id_category_storage+`-` + val.barcode + `</td>
+                        <td>` + val.gram + `</td>
+                        <td>` + val.qty + `</td>
+                        <td>` + format(Number(val.price)) + `</td>
+                        <td><span class="totalPrice">` + format(Number(val.price) * Number(val.qty)) + `</span></td>
                       </tr>`;
             $(".bodyRawTable").append(template);
-
-
-            $(".btn-delete-item").on("click", function() {
-              let id = $(this).data("id");
-              delete vListProduct[id];
-              var cek = $(this).parent("td").parent("tr").remove();
-
-              var totalAll = 0;
-              $('.totalPrice').each(function() {
-                totalAll += Number($(this).html().replaceAll(",", ""))
-              });
-              $(".totalAllAmount").html("Rp " + format(totalAll));
-            });
-
-
-            $(".qtyInput").on("click", function() {
-              // Select the text field
-              var focusgram = $(this);
-              focusgram.select();
-            });
-
-            $(".priceInput").on("focusout", function() {
-              // Select the text field
-              var id = $(this).data("id");
-              var qty = $(".qty" + id).val();
-              var price = $(".price" + id).val();
-
-              vListProduct[id]['qty'] = qty;
-              vListProduct[id]['price'] = price;
-
-              var total = qty * price;
-              $(".totalInput" + id).html(format(total));
-
-              var totalAll = 0;
-              $('.totalPrice').each(function() {
-                totalAll += Number($(this).html().replaceAll(",", ""))
-              });
-              $(".totalAllAmount").html("Rp " + format(totalAll));
-            });
-
-            $(".qtyInput").on("focusout", function() {
-              // Select the text field
-              var id = $(this).data("id");
-              var qty = $(".qty" + id).val();
-              var price = $(".price" + id).val();
-
-              vListProduct[id]['qty'] = qty;
-              vListProduct[id]['price'] = price;
-
-              var total = qty * price;
-              $(".totalInput" + id).html(format(total));
-
-              var totalAll = 0;
-              $('.totalPrice').each(function() {
-                totalAll += Number($(this).html().replaceAll(",", ""))
-              });
-              $(".totalAllAmount").html("Rp " + format(totalAll));
-            });
-
-            $(".priceInput").on("click", function() {
-              // Select the text field
-              var focusgram = $(this);
-              focusgram.select();
-            });
-
-            $('.qtyInput').on('keypress', function(e) {
-              if (e.which === 13) {
-                $(this).blur();
-              }
-            });
-
-            $('.priceInput').on('keypress', function(e) {
-              if (e.which === 13) {
-                $(this).blur();
-              }
-            });
-
-            var totalAll = 0;
-            $('.totalPrice').each(function() {
-              totalAll += Number($(this).html().replaceAll(",", ""))
-            });
-            $(".totalAllAmount").html("Rp " + format(totalAll));
-            popup('success', msg.info, '');
-
-            $(".inputProductScanner").val(null);
-            $(".inputProductScanner").focus();
-
-
           });
 
+          $(".containerDPAmount").css("display", "block");
+          $(".dpAmount").html("Rp " + format(Number(msg.data_sales.payment_dp)));
+          $(".change").html("Rp " + format(Number(msg.data_sales.change)));
+          $(".strukNumber").html(msg.data_sales.nobill);
+          nostruk = msg.data_sales.nobill;
+          $(".dateTransaksi").html(msg.data_sales.sales_date);
+          paymentdp = msg.data_sales.payment_dp;
 
+
+
+          var totalAll = 0;
+          $('.totalPrice').each(function() {
+            totalAll += Number($(this).html().replaceAll(",", ""))
+          });
+          $(".totalAllAmount").html("Rp " + format(totalAll));
+          popup('success', msg.info, '');
+
+          $(".inputProductScanner").val(null);
+          $(".inputProductScanner").focus();
 
 
         } else {
           popup('error', msg.info, '');
         }
 
+        $("#loading").addClass("hide");
+
       },
       error: function(err) {
+        $("#loading").addClass("hide");
         console.log(err);
         popup('error', err.responseText, '');
       }

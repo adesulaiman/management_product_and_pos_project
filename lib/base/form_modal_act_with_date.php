@@ -585,7 +585,7 @@ if(isset($_SESSION['userid']))
 		}else if($type == 'search')
 		{
 			$qField = $adeQ->select($adeQ->prepare(
-			    "select * from core_fields where id_form=%d and active is true and search_enable=1 order by id", $f
+			    "select * from core_fields where id_form=%d and search_enable=1 order by id", $f
 			));
 			$selectForm = "<select class='form-control filter' name='filter[]'>";
 			foreach($qField as $valField)
