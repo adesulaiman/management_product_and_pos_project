@@ -13,7 +13,7 @@ if(isset($_SESSION['userid']))
 		$data = $adeQ->select($adeQ->prepare("select d.*, concat(s.id_category_storage, '-', d.barcode) uniq_barcode , c.storage_name
 		from data_product d inner join data_stock_product s on d.barcode = s.barcode  
 		inner join data_category_storage c on s.id_category_storage=c.id
-		where d.barcode = %s", $barcode));
+		where d.barcode = %s and d.is_delete = 0", $barcode));
 		if(!empty($data)){
 			echo json_encode([
 				"status" => "success",
