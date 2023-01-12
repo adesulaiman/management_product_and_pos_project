@@ -112,6 +112,14 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
 
   <style>
+    .content-header>.breadcrumb>li>a {
+      color: #fff;
+    }
+
+    .breadcrumb>.active {
+      color: #fff;
+    }
+
     th,
     td {
       white-space: nowrap;
@@ -125,7 +133,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
       width: 80%;
     }
 
-    h1{
+    h1 {
       color: white;
     }
 
@@ -363,7 +371,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    
+
 
 
 
@@ -512,6 +520,16 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
       $("[data-mask]").inputmask();
       HtmlLoad('welcome.php', 'Audit Trail');
+
+
+      function format(n, sep, decimals) {
+        sep = sep || "."; // Default to period as decimal separator
+        decimals = decimals || 2; // Default to 2 decimals
+
+        return n.toLocaleString().split(sep)[0] +
+          sep +
+          n.toFixed(decimals).split(sep)[1];
+      }
     </script>
 
 

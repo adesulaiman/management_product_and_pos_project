@@ -1,7 +1,7 @@
 <?php
 
 $path = "..";
-$dir = 'http://localhost/applications/management_product_and_pos_project/';
+$dir = 'https://cahaya2goldjewellery.com/';
 
 $title = "Management Product and POS System";
 $organization = "Cahaya Emas";

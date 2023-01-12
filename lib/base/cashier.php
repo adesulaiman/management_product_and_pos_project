@@ -357,15 +357,6 @@ $nostruk = uniqid();
 
   $(".inputProductScanner").focus();
 
-  function format(n, sep, decimals) {
-    sep = sep || "."; // Default to period as decimal separator
-    decimals = decimals || 2; // Default to 2 decimals
-
-    return n.toLocaleString().split(sep)[0] +
-      sep +
-      n.toFixed(decimals).split(sep)[1];
-  }
-
   $(".select2").select2({
     ajax: {
       url: './lib/base/select_data.php?t=vw_select_product&filter=all',
