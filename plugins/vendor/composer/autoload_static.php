@@ -17,6 +17,10 @@ class ComposerStaticInita81373e040b08331c07419fd26f607d6
             'Symfony\\Component\\Process\\' => 26,
             'Spatie\\PdfToText\\' => 17,
         ),
+        'P' => 
+        array (
+            'Picqer\\Barcode\\' => 15,
+        ),
         'C' => 
         array (
             'Com\\Tecnick\\Color\\' => 18,
@@ -36,6 +40,10 @@ class ComposerStaticInita81373e040b08331c07419fd26f607d6
         'Spatie\\PdfToText\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/pdf-to-text/src',
+        ),
+        'Picqer\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/picqer/php-barcode-generator/src',
         ),
         'Com\\Tecnick\\Color\\' => 
         array (

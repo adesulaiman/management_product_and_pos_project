@@ -5,6 +5,9 @@ require "../base/db.php";
 require "../base/security_login.php";
 
 $formDesc = "Print Barcode";
+
+
+
 ?>
 
 <section class="content-header">
@@ -27,6 +30,7 @@ $formDesc = "Print Barcode";
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
+
             <div class="col-md-6">
               <select class="form-control select2 dataProduct" style="width: 100%;">
                 <option value="">-- Find Product --</option>
@@ -76,6 +80,39 @@ $formDesc = "Print Barcode";
     "dom": 'ftp',
     "pageLength": 9
   });
+
+
+  $(".printBarcode").on("click", function() {
+
+    if (!jQuery.isEmptyObject(printValue)) {
+
+      var dataPost = {
+        "dataPrint": printValue
+      };
+
+      $.ajax({
+        method: "POST",
+        url: "./lib/base/printBarcode.php",
+        data: dataPost,
+        success: function(msg) {
+          let pdfWindow = window.open("")
+          pdfWindow.document.write(
+            "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
+            encodeURI(msg) + "'></iframe>"
+          )
+
+        },
+        error: function(err) {
+          console.log(err);
+          popup("error", err.responseText);
+          $("#loading").addClass("hide");
+        }
+      });
+
+    } else {
+      popup("error", "Please add product to print barcode !!");
+    }
+  })
 
 
   $('.tableGrid tbody').on('click', '.btnDelete', function() {
