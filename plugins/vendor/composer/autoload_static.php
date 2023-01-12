@@ -17,6 +17,11 @@ class ComposerStaticInita81373e040b08331c07419fd26f607d6
             'Symfony\\Component\\Process\\' => 26,
             'Spatie\\PdfToText\\' => 17,
         ),
+        'C' => 
+        array (
+            'Com\\Tecnick\\Color\\' => 18,
+            'Com\\Tecnick\\Barcode\\' => 20,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -31,6 +36,14 @@ class ComposerStaticInita81373e040b08331c07419fd26f607d6
         'Spatie\\PdfToText\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/pdf-to-text/src',
+        ),
+        'Com\\Tecnick\\Color\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-color/src',
+        ),
+        'Com\\Tecnick\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-barcode/src',
         ),
     );
 

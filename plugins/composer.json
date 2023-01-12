@@ -1,5 +1,6 @@
 {
     "require": {
-        "spatie/pdf-to-text": "^1.52"
+        "spatie/pdf-to-text": "^1.52",
+        "tecnickcom/tc-lib-barcode": "1.17"
     }
 }
