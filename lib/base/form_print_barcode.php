@@ -106,6 +106,7 @@ $formDesc = "Print Barcode";
     var qtyPrint = $(".qtyPrint").val();
 
     if (barcode != "" && qtyPrint != "") {
+      $("#loading").removeClass("hide");
 
       var dataForm = {
         "barcode": barcode
@@ -141,9 +142,12 @@ $formDesc = "Print Barcode";
           } else {
             popup("error", msg.info);
           }
+
+          $("#loading").addClass("hide");
         },
         error: function(err) {
           popup("error", err.responseText);
+          $("#loading").addClass("hide");
         }
       });
 
