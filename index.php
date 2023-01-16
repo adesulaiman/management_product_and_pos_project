@@ -246,7 +246,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
         <span class="logo-mini"><img src="<?php echo $dir ?>assets/img/logo.png?v=1" style="width: 70%;" /><br></span>
         <!-- logo for regular state and mobile devices -->
         <!-- <span class="logo-lg"><img src="<?php echo $dir ?>assets/img/logo_apps.png" style="width: 60%;"/></span> -->
-        <span class="logo-lg" style="font-family: 'Grand Hotel', cursive; font-size:30px"><?php echo $organization ?></span>
+        <span class="logo-lg" style="font-family: 'Grand Hotel', cursive; font-size:20px"><?php echo $organization ?></span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top">
