@@ -4,7 +4,7 @@ $path = "..";
 $dir = 'https://cahaya2goldjewellery.com/';
 
 $title = "Management Product and POS System";
-$organization = "Cahaya Emas";
+$organization = "Cahaya Gold & Jewellery";
 $appname = "Management Product and POS System";
 $dbName = "u965363723_management";
 $dbUser = "u965363723_superuser";

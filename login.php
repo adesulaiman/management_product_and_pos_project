@@ -14,7 +14,7 @@ require "lib/base/db.php";
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="<?php echo $dir ?>assets/img/logo.png" />
+	<link rel="icon" type="image/png" href="<?php echo $dir ?>assets/img/logo.png?v=1" />
 
 
 	<link type="text/css" rel="stylesheet" href="<?php echo $dir ?>plugins/toater/toastr.min.css" />
@@ -172,7 +172,7 @@ require "lib/base/db.php";
 
 
 				<form class="login100-form validate-form login text-center" style="width:100%;" action="javascript:void(0);">
-					<img src="<?php echo $dir ?>assets/img/logo.png" style="width: 50%;" /><br>
+					<img src="<?php echo $dir ?>assets/img/logo.png?v=1" style="width: 50%;" /><br>
 					<span class="login50-form-title" style="text-align: center;font-size: 30px;padding-bottom: 10px;width: 100%;display: block;color:white;font-family: 'Grand Hotel', cursive;">
 						<?php echo $organization ?>
 					</span>
