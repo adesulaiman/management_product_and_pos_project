@@ -13,10 +13,10 @@ if (isset($_SESSION['userid'])) {
 	
 	$data = [];
 	foreach($dataPrint as $product){
-		for($h=0 ; $h <= $product['qtyPrint']; $h++){
+		for($h=0 ; $h < $product['qtyPrint']; $h++){
 			$data[] = [
 				"barcode" => $product['barcode'],
-				"price" => "Rp " . number_format($product['sell_price'])
+				"price" =>  number_format($product['gram'], 2) . " gr"
 			];
 		}
 	}
@@ -30,14 +30,14 @@ if (isset($_SESSION['userid'])) {
 	// top bottom = 4.5mm
 
 
-	$marginlr = 12;
-	$margintb = 4.5;
-	$gap = 0.5;
-	$labelhight = 12;
+	$marginlr = 14;
+	$margintb = 5.8;
+	$gap = 0.3;
+	$labelhight = 11.5;
 	$labelwidth = 26;
 
 
-	$looprow = ceil(count($data) / 7);
+	$looprows = ceil(count($data) / 7);
 	$totrow = floor(count($data) / 7) * 7;
 	$lastcnt = count($data) - $totrow;
 
@@ -45,7 +45,7 @@ if (isset($_SESSION['userid'])) {
 	$margintbProses = $margintb;
 	$loopRow = 0;
 	//A set
-	for($l = 1 ; $l <= $looprow; $l++){
+	for($l = 1 ; $l <= $looprows; $l++){
 		$columnloop = 7;
 
 		if(($l % 21) == 0){
@@ -53,7 +53,7 @@ if (isset($_SESSION['userid'])) {
 			$margintbProses = $margintb;
 		}
 
-		if($l == $looprow){
+		if($l == $looprows){
 			$columnloop = $lastcnt;
 		}
 
@@ -62,8 +62,8 @@ if (isset($_SESSION['userid'])) {
 			$code = $data[$loopRow]['barcode'];
 			$harga = $data[$loopRow]['price'];
 			$pdf->Code128($marginlrProses, $margintbProses, $code, $labelwidth - 5, $labelhight - 4);
-			$pdf->SetFont('Arial', '', 8);
-			$pdf->SetXY($marginlrProses -1, $margintbProses + 7.7);
+			$pdf->SetFont('Arial', '', 4);
+			$pdf->SetXY($marginlrProses + 6, $margintbProses + 7);
 			$pdf->Write(4,  $harga);
 			$pdf->SetFont('Arial', '', 7);
 			$pdf->TextWithDirection($marginlrProses + $labelwidth - 4.5, $margintbProses , $code ,'D');

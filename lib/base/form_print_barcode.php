@@ -83,6 +83,7 @@ $formDesc = "Print Barcode";
 
 
   $(".printBarcode").on("click", function() {
+    console.log(printValue);
 
     if (!jQuery.isEmptyObject(printValue)) {
 
@@ -167,7 +168,7 @@ $formDesc = "Print Barcode";
             };
 
             table.row.add([
-              `<button class="btn btn-danger btn-xs btnDelete data-id="` + uniqid + `""><i class="fa fa-fw fa-trash"></i></button>`,
+              `<button class="btn btn-danger btn-xs btnDelete" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button>`,
               msg.product[0].barcode,
               msg.product[0].product_name + ` (` + msg.product[0].description + `)`,
               msg.product[0].gram,
