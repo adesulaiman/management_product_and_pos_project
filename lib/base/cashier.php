@@ -586,7 +586,7 @@ $nostruk = uniqid();
 
   $(".inputProductScanner").on("keyup", function() {
     var value = $(this).val();
-    if (value.length == 13) {
+    if (value.length == 6) {
       $(this).blur();
     }
   });
