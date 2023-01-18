@@ -417,7 +417,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
 
         });
 
-        $parent = $('<li class="logout"><a href="#"><i class="fa  fa-arrow-circle-o-left"></i><span>KELUAR</span><span class="pull-right-container"><i class="fa fa-angle-double-left pull-right-container"></i></span></a></li>');
+        $parent = $('<li class="logout"><a href="#"><i class="fa  fa-arrow-circle-o-left"></i><span>LOG OUT</span><span class="pull-right-container"><i class="fa fa-angle-double-left pull-right-container"></i></span></a></li>');
         $("#sidebarmenu").append($parent);
         //$.AdminLTE.tree('.sidebar');
 
