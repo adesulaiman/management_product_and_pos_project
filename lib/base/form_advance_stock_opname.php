@@ -219,7 +219,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/save_data_with_date.php",
+      url: "./lib/base/save_data_with_date_so.php",
       data: dataFrom,
       processData: false,
       contentType: false,
@@ -241,7 +241,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(".formSubmit").html("Submit");
 
         if (msg.status) {
-          table.ajax.reload();
+          table.draw(false);
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
         }

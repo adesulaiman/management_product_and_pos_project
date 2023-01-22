@@ -315,7 +315,7 @@ if (isset($_SESSION['userid'])) {
             })
 
             if (msg.status) {
-              table.ajax.reload();
+              table.draw(false);
               popup('success', 'Success', '');
               $('#Modal<?php echo $formName ?>').modal('toggle');
             }
