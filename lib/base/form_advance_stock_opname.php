@@ -140,7 +140,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     },
     "searching": false,
     "scrollX": true,
-    // order: [[ 3, "desc" ]] ,
+    order: [[ 2, "desc" ]] ,
     scrollCollapse: true,
     "lengthMenu": [
       [10, 25, 50, -1],
@@ -163,28 +163,14 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         }
       },
       {
-        text: '<i class="fa fa-pencil-square-o"></i> Edit',
+        text: '<i class="fa fa-trash-o"></i> Cancel',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
             alert('Mohon pilih data terlebih dahulu');
           } else {
-            loadForm(rowData.id, "edit");
-          }
-
-
-        }
-      },
-      {
-        text: '<i class="fa fa-trash-o"></i> Delete',
-        action: function(e, dt, node, config) {
-          var rowData = dt.rows(".selected").data()[0];
-
-          if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
-          } else {
-            loadFormTw(rowData.id, "delete");
+            loadFormTw(rowData.id, "cancel");
           }
         }
       },
@@ -233,7 +219,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/save_data_with_date_product.php",
+      url: "./lib/base/save_data_with_date.php",
       data: dataFrom,
       processData: false,
       contentType: false,
@@ -255,7 +241,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(".formSubmit").html("Submit");
 
         if (msg.status) {
-          table.draw(false);
+          table.ajax.reload();
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
         }
@@ -488,7 +474,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/form_modal_act_with_date.php?f=<?php echo $f ?>&type=" + type + val,
+      url: "./lib/base/form_modal_act_with_cancel.php?f=<?php echo $f ?>&type=" + type + val,
       success: function(msg) {
         // console.log(JSON.parse(msg));
         var fData = JSON.parse(msg)
