@@ -3,6 +3,7 @@
 require "../../config.php";
 require "../base/db.php";
 require "../base/security_login.php";
+require "../base/security_so.php";
 
 $f = $_GET['f'];
 
