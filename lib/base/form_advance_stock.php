@@ -141,9 +141,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     },
     "searching": false,
     "scrollX": true,
-    order: [
-      [5, "desc"]
-    ],
+    // order: [[ 3, "desc" ]] ,
     scrollCollapse: true,
     "lengthMenu": [
       [10, 25, 50, -1],
@@ -159,32 +157,28 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       ?>
     ],
     buttons: [{
-        text: '<i class="fa fa-plus-circle"></i> Add',
-        action: function(e, dt, node, config) {
-          loadForm(null, "add");
-
-        }
-      },
-      {
-        text: '<i class="fa fa-trash-o"></i> Cancel',
+        text: '<i class="fa fa-fw fa-exchange"></i> Move Stock',
+        className: 'btn btn-warning',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
-
           if (rowData == null) {
             alert('Please select data');
           } else {
-            loadFormTw(rowData.id, "cancel");
+            loadForm(rowData.id, rowData.product, rowData.storage_name, rowData.qty_stock, rowData.gram);
           }
+
         }
       },
       {
         text: '<i class="fa fa-search"></i> Search',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
@@ -206,59 +200,56 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     $(this).attr("disabled", true);
     $(this).html("Mohon Tunggu");
 
-    var form_data = $('.formModal<?php echo $formName ?>').serializeArray();
-    $.each(form_data, function(key, input) {
-      ;
-      dataFrom.append(input.name, input.value);
-    });
+    var selectedData = table.rows('.selected').data()[0];
 
-    //File data
-    var file_data = $('input[type="file"]');
-    for (var i = 0; i < file_data.length; i++) {
-      dataFrom.append(file_data[i].name, file_data[i].files[0]);
+    var qtymove = $(".qty_stock").val();
+    var storage = $(".id_category_storage ").val();
+    var qtystock = selectedData.qty_stock;
+    var id = selectedData.id;
+
+    if (qtymove > qtystock) {
+      popup("error", "Qty move grether then from qty stock !!");
+      $(".formSubmit").attr("disabled", false);
+      $(".formSubmit").html("Submit");
+    } else {
+
+      var datapost = {
+        qtymove: qtymove,
+        id: id,
+        id_storage: storage,
+        barcode : selectedData.barcode
+      }
+
+      $.ajax({
+        method: "POST",
+        url: "./lib/base/move_stock.php",
+        data: datapost,
+        dataType: 'json',
+        success: function(msg) {
+
+          $(".formSubmit").attr("disabled", false);
+          $(".formSubmit").html("Submit");
+
+          if (msg.status) {
+            table.draw(false);
+            $('#Modal<?php echo $formName ?>').modal('toggle');
+            popup('success', msg.info, '');
+          } else {
+            popup('error', msg.info, '');
+          }
+
+        },
+        error: function(err) {
+          $(".formSubmit").attr("disabled", true);
+          $(".formSubmit").html("Submit");
+          console.log(err);
+          popup('error', err.responseText, '');
+        }
+      });
+
     }
 
-    dataFrom.append("f", "<?php echo $f ?>");
 
-    $.ajax({
-      method: "POST",
-      url: "./lib/base/save_data_with_date_so.php",
-      data: dataFrom,
-      processData: false,
-      contentType: false,
-      dataType: 'json',
-      success: function(msg) {
-        console.log(msg);
-        $.each(msg.validate, function(index, value) {
-          if (value.err == 'validate') {
-            $('.grp' + value.field).removeClass("has-error").addClass("has-error");
-            $('.err' + value.field).html(value.msg);
-          } else {
-            $('.grp' + value.field).removeClass("has-error");
-            $('.err' + value.field).html(null);
-          }
-        })
-
-
-        $(".formSubmit").attr("disabled", false);
-        $(".formSubmit").html("Submit");
-
-        if (msg.status) {
-          table.draw(false);
-          $('#Modal<?php echo $formName ?>').modal('toggle');
-          popup('success', msg.msg, '');
-        } else {
-          popup('error', msg.msg, '');
-        }
-
-      },
-      error: function(err) {
-        $(".formSubmit").attr("disabled", true);
-        $(".formSubmit").html("Submit");
-        console.log(err);
-        popup('error', err.responseText, '');
-      }
-    });
   })
 
 
@@ -338,133 +329,45 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
   })
 
 
-  function loadForm(id, type) {
-    if (id == null) {
-      var val = '';
-    } else {
-      var val = "&v=" + id;
-    }
+  function loadForm(id, product, storage, stock, gram) {
+    $('#ModalText<?php echo $formName ?>').text('Move Stock Product');
+    $('.formModal<?php echo $formName ?>').html(`
+      <h4>Product : <b>` + product + `</b></h4>
+      <h4>Storage : <b>` + storage + `</b></h4>
+      <h4>Stock : <b>` + stock + ` (` + gram + ` Gr)</b></h4>
+      
+      <hr>
+      <div class="form-group grpuserid col-md-12">  
+        <label >Storage</label>
+          <select class="form-control id_category_storage" style="width:100%">
+            <option value="">-- Storage --</option>
+          </select>
+      </div>
 
+      <div class="form-group col-md-12">
+          <label for="userid">Qty Stock</label>
+          <input type="number" name="qty_stock" class="form-control qty_stock" placeholder="Qty Stock Move">
+          <span class="help-block erruserid"></span>
+      </div>
+    `);
 
-    $.ajax({
-      method: "POST",
-      url: "./lib/base/form_modal_act_with_date.php?f=<?php echo $f ?>&type=" + type + val,
-      success: function(msg) {
-
-        var fData = JSON.parse(msg)
-        $('#ModalText<?php echo $formName ?>').text(fData.type);
-        $('.formModal<?php echo $formName ?>').html(fData.data);
-
-        $('.datepicker').datepicker({
-          format: '<?php echo $dateJS ?>',
-          autoclose: true
-        });
-
-        <?php
-        foreach ($qFieldSelect as $select) {
-          if ($select['case_cade'] != null) {
-            $qCaseCade = $adeQ->select($adeQ->prepare("select * from core_fields where id_form=%d and id=%d", $f, $select['case_cade']));
-            foreach ($qCaseCade as $caseCade) {
-              echo "
-                var id = $('.$caseCade[name_field]').val();
-                if(id.length == 0)
-                {
-                  $('.$select[name_field]').prop('disabled', true);
-                  $('.$caseCade[name_field]').on('change', function(){
-                      $('.$select[name_field]').prop('disabled', false);
-                      var id = $(this).val();
-                      $('.$select[name_field]').val(null).trigger('change');
-                      $('.$select[name_field]').select2({
-                        ajax: {
-                          url: '$select[link_type_input]&filter=' + id,
-                          dataType: 'json',
-                          data: function (params) {
-                            return {search: params.term};
-                          }
-                        }
-                    });
-                 });
-                }else{
-                  $('.$select[name_field]').prop('disabled', false);
-                  $('.$select[name_field]').select2({
-                        ajax: {
-                          url: '$select[link_type_input]&filter=' + id,
-                          dataType: 'json',
-                          data: function (params) {
-                            return {search: params.term};
-                          }
-                        }
-                    });
-                    $('.$caseCade[name_field]').on('change', function(){
-                      $('.$select[name_field]').prop('disabled', false);
-                      var id = $(this).val();
-                      $('.$select[name_field]').val(null).trigger('change');
-                      $('.$select[name_field]').select2({
-                        ajax: {
-                          url: '$select[link_type_input]&filter=' + id,
-                          dataType: 'json',
-                          data: function (params) {
-                            return {search: params.term};
-                          }
-                        }
-                    });
-                 });
-                }
-               
-              ";
-            }
-          } else {
-            if ($select['type_input'] == 'checkbox') {
-              echo "
-              $('.$select[name_field]').select2({
-                tags: true,
-                tokenSeparators: ['|', '	'],
-                ajax: {
-                  url: '$select[link_type_input]',
-                  dataType: 'json',
-                  data: function (params) {
-                    return {search: params.term};
-                  }
-                }
-            });
-            ";
-            } else {
-              echo "
-                $('.$select[name_field]').select2({
-                  ajax: {
-                    url: '$select[link_type_input]',
-                    dataType: 'json',
-                    data: function (params) {
-                      return {search: params.term};
-                    }
-                  }
-              });
-              ";
-            }
-          }
+    $('.id_category_storage').select2({
+      ajax: {
+        url: './lib/base/select_data.php?t=vw_select_storage&filter=all',
+        dataType: 'json',
+        data: function(params) {
+          return {
+            search: params.term
+          };
         }
-        ?>
-
-        $('.actFilter').css('display', 'none');
-        $('.formSubmit').css('display', 'inline');
-
-        <?php
-        foreach ($qFieldimage as $img) {
-          echo 'imageInit($(".' . $img['name_field'] . '-img"), $(".' . $img['name_field'] . '-input"));';
-        }
-        ?>
-
-
-
-        $("[data-mask]").inputmask();
-
-
-        $('#Modal<?php echo $formName ?>').modal('show');
-      },
-      error: function(err) {
-        console.log(err);
       }
     });
+    $('.formSubmit').css('display', 'inline');
+    $('.actFilter').css('display', 'none');
+
+
+    $('#Modal<?php echo $formName ?>').modal('show');
+
   }
 
 
@@ -479,7 +382,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/form_modal_act_with_cancel.php?f=<?php echo $f ?>&type=" + type + val,
+      url: "./lib/base/form_modal_act_with_date.php?f=<?php echo $f ?>&type=" + type + val,
       success: function(msg) {
         // console.log(JSON.parse(msg));
         var fData = JSON.parse(msg)

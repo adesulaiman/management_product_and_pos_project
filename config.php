@@ -1,14 +1,14 @@
 <?php
 
 $path = "..";
-$dir = 'https://cahaya2goldjewellery.com/';  // http://localhost/applications/management_product_and_pos_project/
+$dir = 'http://cahaya2goldjewellery.com/';  // http://cahaya2goldjewellery.com/
 
 $title = "Management Product and POS System";
 $organization = "Cahaya Gold & Jewellery"; 
 $appname = "Management Product and POS System";
 $dbName = "u965363723_management";
-$dbUser = "u965363723_superuser";
-$dbPassword = "g2nLV|gG#VU*";
+$dbUser = "u965363723_superuser";  //u965363723_superuser
+$dbPassword = "g2nLV|gG#VU*";  //g2nLV|gG#VU*
 $dbHost = "localhost"; //153.92.13.103
 $port = '3306';
 $dbRDBMS = 'mysql';

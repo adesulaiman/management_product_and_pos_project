@@ -180,9 +180,9 @@ if (isset($_SESSION['userid'])) {
 					if ($ins2) {
 						$updateStock = $adeQ->query("
 							UPDATE data_stock_product s inner join 
-							(select barcode, id_category_storage, sum(qty) qty from data_sales_detail where no_struk='$nostruk' group by barcode, id_category_storage) as d
+							(select barcode, id_category_storage, sum(qty) qty, sum(qty*gram) gram from data_sales_detail where no_struk='$nostruk' group by barcode, id_category_storage) as d
 							ON s.barcode = d.barcode and s.id_category_storage = d.id_category_storage
-							SET s.qty_stock = s.qty_stock - d.qty,
+							SET s.qty_stock = s.qty_stock - d.qty, s.gram = s.gram - d.gram, 
 							s.stock_date = '".date("Y-m-d H:i:s")."'
 						");
 

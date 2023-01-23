@@ -3,6 +3,7 @@
 require "../../config.php";
 require "../base/db.php";
 require "../base/security_login.php";
+require "../base/security_so.php";
 
 $nostruk = uniqid();
 ?>
@@ -186,7 +187,7 @@ $nostruk = uniqid();
               <div class="col-md-12">
                 <label>Add Product</label>
                 <div class="input-group input-group-sm inputScanner">
-                  <input type="text" class="form-control inputProductScanner" maxlength="13" , placeholder="ex : 128i17uxj2123">
+                  <input type="text" class="form-control inputProductScanner" maxlength="6" , placeholder="ex : 128i17uxj2123">
                   <span class="input-group-btn">
                     <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
                   </span>

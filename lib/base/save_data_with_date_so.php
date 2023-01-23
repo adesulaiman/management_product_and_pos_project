@@ -268,19 +268,24 @@ if(isset($_SESSION['userid']))
 
 				if($stt)
 				{
-					$q = "insert into $formCode (".implode(",", $fieldNm).") values (".implode(",", $ins).")";
-					$ins = $adeQ->query($q);
-					$msg = 'Data Berhasil Di Simpan';
-					if(!$ins)
-					{
-						$msg = 'Error Insert Data : '. $q;
+					//cek status open
+					$qOpen = $adeQ->select("select count(1) cek from data_stock_opname where status_stock_opname='open'");
+					if($qOpen[0]['cek'] > 0){
+						$msg = 'Status stock opname still opened, please finish process status stock opname first !!';
 						$stt = false;
+					}else{
+						$q = "insert into $formCode (".implode(",", $fieldNm).") values (".implode(",", $ins).")";
+						error_log($q);
+						$ins = $adeQ->query($q);
+						$msg = 'Data Berhasil Di Simpan';
+						if(!$ins)
+						{
+							$msg = 'Error Insert Data : '. $q;
+							$stt = false;
+						}
 					}
+					
 				}
-
-				
-
-				
 
 				echo json_encode(['status'=> $stt, 'validate' => $validate, 'msg' => $msg]);
 				break;
@@ -547,7 +552,6 @@ if(isset($_SESSION['userid']))
 				if($stt)
 				{
 					$q = "update $formCode set status_stock_opname = 'canceled' where $where";
-					error_log($q);
 					$del = $adeQ->query($q);
 					$msg = 'Stock Opname Canceled Successfully';
 					if(!$del)

@@ -7,41 +7,96 @@ if(isset($_SESSION['userid']))
 {
 	if(isset($_GET['f']) and isset($_GET['t']))
   	{
-		$t = "(
-			select 
-			p.id,
-			p.id_stock_opname,
-			p.storage_name,
-			concat(p.product_name, ' pcs (',p.barcode,')') product,
-			concat(p.qty_phisycal, ' pcs (',p.gram_phisycal,' Gr)') physical_stock,
-			concat(p.qty_stock, ' pcs (',p.gram,' Gr)') system_stock,
-			case 
-				when p.gap_qty <= 0 then concat('<span style=\"color:red;font-size:17px\">- ',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
-				else concat('<span style=\"color:green;font-size:17px\">+ ',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
-			end  difference
-			from 
-			(
-				select 
-				d.id,
-				d.id_stock_opname,
-				c.storage_name,
-				d.barcode,
-				d.product_name,
-				d.qty_phisycal,
-				d.qty_phisycal * coalesce(p.gram, 0) gram_phisycal,
-				coalesce(s.qty_stock, 0) qty_stock,
-				coalesce(s.gram, 0) gram,
-				d.qty_phisycal - coalesce(s.qty_stock, 0) gap_qty,
-				(d.qty_phisycal * coalesce(p.gram, 0) ) - coalesce(s.gram, 0) gap_gram
-				from data_stock_opname_detail d
-				left join data_product p on d.barcode=p.barcode
-				left join data_category_storage c on d.id_category_storage = c.id
-				left join data_stock_product s on d.id_category_storage = s.id_category_storage and d.barcode=s.barcode
-			) p
-		) x";
+		
 		$f = $_GET['f'];
 		$w = $_GET['w'];
+		$iscommit = $_GET['iscommit'];
 
+		if($iscommit){
+
+			$t = "(
+				select 
+				p.id,
+				p.id_stock_opname,
+				p.barcode id_barcode,
+				p.id_gram_product,
+				p.storage_name,
+				concat(p.product_name, ' pcs (',p.barcode,')') product,
+				concat(p.qty_phisycal, ' pcs (',p.gram_phisycal,' Gr)') physical_stock,
+				concat(p.qty_stock, ' pcs (',p.gram,' Gr)') system_stock,
+				concat(p.qty_adjusment, ' pcs (',p.gram_adjusment,' Gr)') adjusment,
+				case 
+					when p.gap_qty < 0 then concat('<span style=\"color:red;font-size:17px\">',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
+					when p.gap_qty = 0 then concat('<span style=\"color:blue;font-size:17px\">',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
+					else concat('<span style=\"color:green;font-size:17px\">+ ',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
+				end  difference
+				from 
+				(
+					select 
+					d.id,
+					d.id_stock_opname,
+					c.storage_name,
+					d.barcode,
+					d.product_name,
+					d.qty_phisycal,
+					p.gram id_gram_product,
+					d.qty_phisycal * coalesce(p.gram, 0) gram_phisycal,
+					coalesce(s.qty_stock, 0) qty_stock,
+					coalesce(s.gram, 0) gram,
+					coalesce(d.qty_adjusment, 0) qty_adjusment,
+					coalesce(d.qty_adjusment, 0) * coalesce(p.gram, 0) gram_adjusment,
+					(d.qty_phisycal - coalesce(s.qty_stock, 0)) + coalesce(d.qty_adjusment, 0)  gap_qty,
+					((d.qty_phisycal * coalesce(p.gram, 0) ) - coalesce(s.gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.gram, 0)) gap_gram
+					from data_stock_opname_detail d
+					left join data_product p on d.barcode=p.barcode
+					left join data_category_storage c on d.id_category_storage = c.id
+					left join data_stock_product s on d.id_category_storage = s.id_category_storage and d.barcode=s.barcode
+				) p
+			) x";
+
+			
+		}else{
+			$t = "(
+				select 
+				p.id,
+				id_stock_opname,
+				p.barcode id_barcode,
+				'' id_gram_product,
+				p.storage_name,
+				concat(p.product_name, ' pcs (',p.barcode,')') product,
+				concat(p.qty_phisycal, ' pcs (',p.gram_physycal,' Gr)') physical_stock,
+				concat(p.qty_stock, ' pcs (',p.gram_stock,' Gr)') system_stock,
+				concat(p.qty_adjusment, ' pcs (',p.gram_adjusment,' Gr)') adjusment,
+				case 
+					when p.qty_diff < 0 then concat('<span style=\"color:red;font-size:17px\">',p.qty_diff, ' pcs (',p.gram_diff,' Gr)','</span>')
+					when p.qty_diff = 0 then concat('<span style=\"color:blue;font-size:17px\">',p.qty_diff, ' pcs (',p.gram_diff,' Gr)','</span>')
+					else concat('<span style=\"color:green;font-size:17px\">+ ',p.qty_diff, ' pcs (',p.gram_diff,' Gr)','</span>')
+				end  difference
+				from 
+				(
+					select 
+					d.id,
+					c.storage_name,
+					d.id_stock_opname,
+					d.id_category_storage,
+					d.barcode,
+					d.product_name,
+					d.qty_phisycal,
+					d.gram_physycal,
+					d.qty_stock,
+					d.gram_stock,
+					d.qty_adjusment,
+					d.gram_adjusment,
+					d.qty_diff,
+					d.gram_diff,
+					d.created_by,
+					d.created_date
+					from data_stock_opname_detail_report d
+					left join data_category_storage c on d.id_category_storage = c.id
+				) p
+			) x";
+		}
+		
 
 		$qField = $adeQ->select($adeQ->prepare(
 		    "select * from information_schema.columns where table_name=%s order by ordinal_position", 'vw_data_detail_stock'
