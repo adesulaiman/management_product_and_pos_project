@@ -5,6 +5,12 @@ require "../base/db.php";
 require "../base/security_login.php";
 
 $f = $_GET['f'];
+$script = $_GET['s'];
+$fParent = $_GET['f_parent'];
+$sub = $_GET['sub'];
+$subdesc = $_GET['sub_desc'];
+
+$formDesc = $subdesc;
 
 $qForm = $adeQ->select($adeQ->prepare(
   "select * from core_forms where idform=%d",
@@ -13,6 +19,11 @@ $qForm = $adeQ->select($adeQ->prepare(
 
 $qField = $adeQ->select($adeQ->prepare(
   "select * from core_fields where id_form=%d and active is true order by id",
+  $f
+));
+
+$qFieldSub = $adeQ->select($adeQ->prepare(
+  "select * from core_fields where id_form=%d and active is true and type_field='sub' order by id",
   $f
 ));
 
@@ -30,27 +41,32 @@ $qFieldimage = $adeQ->select($adeQ->prepare(
 foreach ($qForm as $valForm) {
   $formName = $valForm['formname'];
   $formView = $valForm['formview'];
-  $formDesc = $valForm['description'];
+  // $formDesc = $valForm['description'];
   $formCode = $valForm['formcode'];
 }
 
 //SHOW SCHEMA VIEW
 $qSchemaView = $adeQ->select($adeQ->prepare(
-  "select * from information_schema.columns where table_name=%s and table_schema=%s order by ordinal_position",
-  $formView, $dbName
+  "select * from information_schema.columns where table_name=%s order by ordinal_position",
+  $formView
 ));
 
+//get status receive
+$receive = $adeQ->select("select * from data_receive where id=$sub");
+$statusRecive = $receive[0]['status_receive'] == 'received' ? true : false;
+
 ?>
+
+
 <input type='hidden' class='queryFilter' />
 
 <section class="content-header">
   <h1>
-    <?php echo $formDesc ?>
+    <button onclick="HtmlLoad('./lib/base/<?php echo $script ?>?f=<?php echo $fParent ?>','');" class='btn btn-danger back'><i class="fa fa-angle-left"></i> Back</button> <?php echo $formDesc ?>
   </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="#">Menus</a></li>
-    <li class="active"><?php echo $formDesc ?></li>
   </ol>
 </section>
 
@@ -62,6 +78,19 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
+          <div class="row">
+            <div class="col-md-9">
+              <h3 style="font-size:35px;color:green;margin:0">Total : <b class="totalRecive">Rp 0</b></h3>
+            </div>
+            <?php
+            if(!$statusRecive){
+            ?>
+            <div class="col-md-3">
+              <button class="btn btn-block btn-success btn-lg" data-toggle="modal" data-target="#ModalStorage"><i class="fa fa-fw fa-dropbox"></i> Receive</button>
+            </div>
+
+            <?php } ?>
+          </div>
           <table id="<?php echo $formName ?>" class="stripe row-border order-column table table-bordered table-striped nowrap">
             <thead>
               <tr>
@@ -84,6 +113,39 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     </div>
   </div>
 </section>
+
+
+
+<!-- Modal Add New Data -->
+<div class="modal fade" id="ModalStorage" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"> Select Storage for receive product</h4>
+      </div>
+      <div class="modal-body">
+        <div class="box-body">
+          <select class="form-control selectstorage">
+            <?php
+            $storage = $adeQ->select("select * from data_category_storage where coalesce(is_delete, 0) = 0");
+            foreach ($storage as $store) {
+              echo "
+                  <option value='$store[id]'>$store[storage_name]</option>
+                ";
+            }
+            ?>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-lg btn-success btnCommitReceive"><i class="fa fa-fw fa-dropbox"></i> Receive</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- Modal Add New Data -->
@@ -117,6 +179,8 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     autoclose: true
   });
 
+  getRecapReceive();
+
 
   $('.filterAdvCheck').click(function() {
     if ($(this).prop("checked") == true) {
@@ -132,7 +196,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     "processing": true,
     "serverSide": true,
     "ajax": {
-      "url": "./lib/base/load_data_with_date.php?t=<?php echo $formView ?>&f=<?php echo $f ?>",
+      "url": "./lib/base/load_data_with_date_sub.php?w=<?php echo $qFieldSub[0]['name_field'] . '=' . $sub; ?>&t=<?php echo $formView ?>&f=<?php echo $f ?>",
       "data": function(data) {
         var dtQuery = $(".queryFilter").val();
         data.query = dtQuery;
@@ -140,7 +204,6 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     },
     "searching": false,
     "scrollX": true,
-    order: [[ 0, "desc" ]] ,
     scrollCollapse: true,
     "lengthMenu": [
       [10, 25, 50, -1],
@@ -155,8 +218,13 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       }
       ?>
     ],
-    buttons: [{
+    buttons: [
+      <?php
+      if(!$statusRecive){
+      ?>
+      {
         text: '<i class="fa fa-plus-circle"></i> Add',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           loadForm(null, "add");
 
@@ -164,6 +232,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-pencil-square-o"></i> Edit',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -178,6 +247,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-trash-o"></i> Delete',
+        className: 'btn btn-danger',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -188,14 +258,17 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           }
         }
       },
+      <?php } ?>
       {
         text: '<i class="fa fa-search"></i> Search',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
@@ -214,8 +287,6 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
   $('.formSubmit').on('click', function() {
     var dataFrom = new FormData();
-    $(this).attr("disabled", true);
-    $(this).html("Mohon Tunggu");
 
     var form_data = $('.formModal<?php echo $formName ?>').serializeArray();
     $.each(form_data, function(key, input) {
@@ -230,6 +301,8 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     }
 
     dataFrom.append("f", "<?php echo $f ?>");
+
+    dataFrom.append("<?php echo $qFieldSub[0]['name_field']; ?>", "<?php echo $sub ?>");
 
     $.ajax({
       method: "POST",
@@ -250,20 +323,15 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           }
         })
 
-
-        $(".formSubmit").attr("disabled", false);
-        $(".formSubmit").html("Submit");
-
         if (msg.status) {
-          table.ajax.reload();
+          table.draw(false);
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
         }
 
+        getRecapReceive();
       },
       error: function(err) {
-        $(".formSubmit").attr("disabled", true);
-        $(".formSubmit").html("Submit");
         console.log(err);
         popup('error', err.responseText, '');
       }
@@ -302,7 +370,62 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     table.draw();
 
-  })
+  });
+
+  $(".btnCommitReceive").on("click", function() {
+    var id_storage = $(".selectstorage").val();
+
+    if (id_storage != "") {
+      swal({
+          title: "Commit Receive this Inovice ?",
+          text: "Once commit Receive, this invoice will sync to stock product in system !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willtransaction) => {
+          if (willtransaction) {
+
+            $("#loading").removeClass("hide");
+
+            var dataPost = {
+              id_receive: '<?php echo $sub ?>',
+              id_storage: id_storage
+            };
+            $.ajax({
+              method: "POST",
+              url: "./lib/base/commitreceive.php",
+              data: dataPost,
+              dataType: 'json',
+              success: function(msg) {
+                if (msg.status == 'success') {
+                  $("#ModalStorage").modal("hide");
+                  popup('success', msg.info, '');
+                  setTimeout(function() {
+                    $(".back").click();
+                  }, 500);
+                  
+                } else {
+                  popup('error', msg.info, '');
+                }
+
+                $("#loading").addClass("hide");
+
+              },
+              error: function(err) {
+                console.log(err);
+                popup('error', err.responseText, '');
+                $("#loading").addClass("hide");
+              }
+            });
+          }
+        });
+    } else {
+      popup("error", "Please select storage", "");
+    }
+
+
+  });
 
 
 
@@ -423,13 +546,12 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
               ";
             }
           } else {
-            if ($select['type_input'] == 'checkbox') {
+            if (strpos($select['link_type_input'], 'sub') !== false) {
+              $linkwithsub = str_replace("sub=", "sub=" . $sub, $select['link_type_input']);
               echo "
               $('.$select[name_field]').select2({
-                tags: true,
-                tokenSeparators: ['|', '	'],
                 ajax: {
-                  url: '$select[link_type_input]',
+                  url: '$linkwithsub',
                   dataType: 'json',
                   data: function (params) {
                     return {search: params.term};
@@ -439,16 +561,16 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
             ";
             } else {
               echo "
-                $('.$select[name_field]').select2({
-                  ajax: {
-                    url: '$select[link_type_input]',
-                    dataType: 'json',
-                    data: function (params) {
-                      return {search: params.term};
-                    }
+              $('.$select[name_field]').select2({
+                ajax: {
+                  url: '$select[link_type_input]',
+                  dataType: 'json',
+                  data: function (params) {
+                    return {search: params.term};
                   }
-              });
-              ";
+                }
+            });
+            ";
             }
           }
         }
@@ -511,6 +633,34 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
 
         $('#Modal<?php echo $formName ?>').modal('show');
+      }
+    });
+  }
+
+  function getRecapReceive() {
+    var dataPost = {
+      id_receive: '<?php echo $sub ?>'
+    };
+    $.ajax({
+      method: "POST",
+      url: "./lib/base/loadrekapreceive.php",
+      data: dataPost,
+      dataType: 'json',
+      success: function(msg) {
+        if (msg.status == 'success') {
+          var total = 0;
+          if (msg.data[0].total != null) {
+            total = msg.data[0].total;
+          }
+
+          $(".totalRecive").html('Rp ' + total);
+        } else {
+          popup('error', msg.info, '');
+        }
+
+      },
+      error: function(err) {
+        popup('error', err.responseText, '');
       }
     });
   }

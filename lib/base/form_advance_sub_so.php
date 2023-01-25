@@ -55,7 +55,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 //cek if SO is commited
 $cekSO = $adeQ->select($adeQ->prepare("select * from data_stock_opname where id=%s", $sub));
 $isCommit = 0;
-if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] == "open"){
+if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] == "open") {
   $isCommit = 1;
 }
 
@@ -82,33 +82,33 @@ if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] ==
       <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-          <?php if($isCommit) {?>
-          <div class="row">
-            <div class="col-md-5">
-              <div class="input-group input-group-sm inputScanner">
-                <input type="text" class="form-control inputProductScanner" maxlength="6" ,="" placeholder="Count stock, please search or input barcode product">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
-                </span>
-              </div>
+          <?php if ($isCommit) { ?>
+            <div class="row">
+              <div class="col-md-5">
+                <div class="input-group input-group-sm inputScanner">
+                  <input type="text" class="form-control inputProductScanner" maxlength="6" ,="" placeholder="Count stock, please search or input barcode product">
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
+                  </span>
+                </div>
 
-              <div class="input-group input-group-sm inputManual" style="display: none;">
-                <select class="form-control select2 inputProductManual" style="width: 100%;">
-                  <option value="">-- Find Product --</option>
-                </select>
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-plus-square"></i> Add</button>
-                  <button type="button" class="btn btn-danger btn-flat closeSearch"><i class="fa fa-close"></i> Close</button>
-                </span>
+                <div class="input-group input-group-sm inputManual" style="display: none;">
+                  <select class="form-control select2 inputProductManual" style="width: 100%;">
+                    <option value="">-- Find Product --</option>
+                  </select>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-plus-square"></i> Add</button>
+                    <button type="button" class="btn btn-danger btn-flat closeSearch"><i class="fa fa-close"></i> Close</button>
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4" style="padding:0px 2px">
+                <button class="btn btn-warning btnAdjusment"><i class="fa fa-fw fa-exchange"></i> Adjusment</button>
+              </div>
+              <div class="col-md-3">
+                <button class="btn btn-success btn-lg btn-block commitStock"><i class="fa fa-fw fa-refresh"></i> Commit Stock</button>
               </div>
             </div>
-            <div class="col-md-4" style="padding:0px 2px">
-              <button class="btn btn-warning btnAdjusment"><i class="fa fa-fw fa-exchange"></i> Adjusment</button>
-            </div>
-            <div class="col-md-3">
-              <button class="btn btn-success btn-lg btn-block commitStock"><i class="fa fa-fw fa-refresh"></i> Commit Stock</button>
-            </div>
-          </div>
           <?php } ?>
           <div class="row rekapStock">
 
@@ -249,7 +249,7 @@ if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] ==
     "processing": true,
     "serverSide": true,
     "ajax": {
-      "url": "./lib/base/load_data_with_date_sub_so.php?iscommit=<?php echo $isCommit?>&w=<?php echo $qFieldSub[0]['name_field'] . '=' . $sub; ?>&t=<?php echo $formView ?>&f=<?php echo $f ?>",
+      "url": "./lib/base/load_data_with_date_sub_so.php?iscommit=<?php echo $isCommit ?>&w=<?php echo $qFieldSub[0]['name_field'] . '=' . $sub; ?>&t=<?php echo $formView ?>&f=<?php echo $f ?>",
       "data": function(data) {
         var dtQuery = $(".queryFilter").val();
         data.query = dtQuery;
@@ -272,22 +272,20 @@ if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] ==
       ?>
     ],
     buttons: [
-      <?php if($isCommit) {?>
-      {
-        text: '<i class="fa fa-trash-o"></i> Delete',
-        className: "btn btn-danger",
-        action: function(e, dt, node, config) {
-          var rowData = dt.rows(".selected").data()[0];
+      <?php if ($isCommit) { ?> {
+          text: '<i class="fa fa-trash-o"></i> Delete',
+          className: "btn btn-danger",
+          action: function(e, dt, node, config) {
+            var rowData = dt.rows(".selected").data()[0];
 
-          if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
-          } else {
-            loadFormTw(rowData.id, "delete");
+            if (rowData == null) {
+              alert('Mohon pilih data terlebih dahulu');
+            } else {
+              loadFormTw(rowData.id, "delete");
+            }
           }
-        }
-      },
-      <?php } ?>
-      {
+        },
+      <?php } ?> {
         text: '<i class="fa fa-search"></i> Search',
         className: "btn btn-default",
         action: function(e, dt, node, config) {
@@ -508,34 +506,48 @@ if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] ==
   });
 
   $(".commitStock").on("click", function() {
-    $("#loading").removeClass("hide");
 
-    var formData = {
-      f : 20,
-      formType : "commit",
-      id_stock : '<?php echo $sub ?>'
-    };  
+    swal({
+        title: "Commit Stock Opname ?",
+        text: "Once commit stock opname, you will not be able to back this stock opname !",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willtransaction) => {
+        if (willtransaction) {
+          $("#loading").removeClass("hide");
 
-    $.ajax({
-      method: "POST",
-      url: "./lib/base/save_data_with_date_so_detail.php",
-      data: formData,
-      dataType: 'json',
-      success: function(msg) {
-        if (msg.status == 'success') {
-          popup('success', msg.info, '');
-          $(".back").click();
-        } else {
-          popup('error', msg.info, '');
+          var formData = {
+            f: 20,
+            formType: "commit",
+            id_stock: '<?php echo $sub ?>'
+          };
+
+          $.ajax({
+            method: "POST",
+            url: "./lib/base/save_data_with_date_so_detail.php",
+            data: formData,
+            dataType: 'json',
+            success: function(msg) {
+              if (msg.status == 'success') {
+                popup('success', msg.info, '');
+                $(".back").click();
+              } else {
+                popup('error', msg.info, '');
+              }
+
+              $("#loading").addClass("hide");
+            },
+            error: function(err) {
+              $("#loading").addClass("hide");
+              popup('error', err.responseText, '');
+            }
+          });
         }
 
-        $("#loading").addClass("hide");
-      },
-      error: function(err) {
-        $("#loading").addClass("hide");
-        popup('error', err.responseText, '');
-      }
-    });
+      });
+
   });
 
 
@@ -736,7 +748,7 @@ if($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] ==
   function getRecapStock(idstock, iscommit) {
     var dataPost = {
       id_stock: idstock,
-      iscommit : iscommit
+      iscommit: iscommit
     };
     $.ajax({
       method: "POST",

@@ -157,6 +157,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     ],
     buttons: [{
         text: '<i class="fa fa-plus-circle"></i> Add',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           loadForm(null, "add");
 
@@ -164,6 +165,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-pencil-square-o"></i> Edit',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -178,6 +180,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-trash-o"></i> Delete',
+        className : 'btn btn-danger',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -190,12 +193,14 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-search"></i> Search',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
@@ -233,7 +238,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/save_data_with_date.php",
+      url: "./lib/base/save_data_receive.php",
       data: dataFrom,
       processData: false,
       contentType: false,
@@ -255,9 +260,11 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(".formSubmit").html("Submit");
 
         if (msg.status) {
-          table.ajax.reload();
+          table.draw(false);
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
+        }else{
+          popup('error', msg.msg, '');
         }
 
       },
