@@ -28,8 +28,10 @@ if (isset($_SESSION['userid'])) {
                 break;
 
             case "nota_cashier":
+
+                $struk = $_REQUEST['struk'];
                 ob_start();
-                require_once("template_receive.php");
+                require_once("template_struk.php");
                 $dompdf->loadHtml(ob_get_clean());
                 $dompdf->setPaper('A4', 'potrait');
                 break;

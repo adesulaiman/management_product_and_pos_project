@@ -564,6 +564,6 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 
 
   function report(id) {
-    window.open('./lib/report/generate_pdf.php?template=receive&id_receive=' + id);
+    window.open('./lib/report/generate_pdf.php?template=receive&id_receive=' + id, "popupWindow", "width=900, height=600, scrollbars=yes");
   }
 </script>

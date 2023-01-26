@@ -647,6 +647,8 @@ $nostruk = uniqid();
                 $("#loading").addClass("hide");
 
                 if (msg.status == 'success') {
+                  window.open('./lib/report/generate_pdf.php?template=nota_cashier&struk=stk<?php echo $nostruk ?>', "popupWindow", "width=900, height=600, scrollbars=yes");
+                    
                   swal(msg.info, {
                     icon: "success",
                   }).then((value) => {
@@ -662,10 +664,6 @@ $nostruk = uniqid();
                 popup("error", "Error system !!");
               },
             });
-
-
-
-
           }
         });
     } else {
@@ -720,7 +718,7 @@ $nostruk = uniqid();
 
             var template = `<tr>
                         <td><button class="btn btn-danger btn-xs btn-delete-item" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button></td>
-                        <td>` + msg.product[selectStorage].product_name + ` (` + msg.product[selectStorage].kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">`+msg.product[selectStorage].storage_name+`</small></td>
+                        <td>` + msg.product[selectStorage].product_name + ` (` + msg.product[selectStorage].kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">` + msg.product[selectStorage].storage_name + `</small></td>
                         <td>` + msg.product[selectStorage].uniq_barcode + `</td>
                         <td>` + msg.product[selectStorage].gram + `</td>
                         <td><input type="number" class="form-control input-sm qtyInput qty` + uniqid + `" data-id="` + uniqid + `" value="1"></td>
