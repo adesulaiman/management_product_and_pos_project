@@ -201,7 +201,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             report(rowData.id);
           }
@@ -548,6 +548,6 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
   }
 
   function report(id) {
-    window.open('./lib/report/generate_pdf.php?template=stockopname&id_receive=' + id);
+    window.open('./lib/report/generate_pdf.php?template=stockopname&idstockopname=' + id);
   }
 </script>

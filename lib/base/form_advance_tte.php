@@ -183,7 +183,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             loadForm(rowData.id, rowData.dokumen, rowData.status_flag, rowData.nomor);
           }
@@ -198,7 +198,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             var dokumenDownload = rowData.dokumen.split("<br>");
             for (var i = 0; i < dokumenDownload.length; i++) {
@@ -214,7 +214,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             revisiDokumen(rowData.id,rowData.dokumen, rowData.status_flag);
           }

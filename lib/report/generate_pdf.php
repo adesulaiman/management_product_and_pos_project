@@ -34,32 +34,21 @@ if (isset($_SESSION['userid'])) {
                 $dompdf->setPaper('A4', 'potrait');
                 break;
 
-            case "report_sales_daily":
+            case "reportsales":
+                $idbulan = $_REQUEST['idbulan'];
+                $bulan = $_REQUEST['bulan'];
                 ob_start();
-                require_once("template_receive.php");
-                $dompdf->loadHtml(ob_get_clean());
-                $dompdf->setPaper('A4', 'potrait');
-                break;
-
-            case "report_sales_monthly":
-                ob_start();
-                require_once("template_receive.php");
-                $dompdf->loadHtml(ob_get_clean());
-                $dompdf->setPaper('A4', 'potrait');
-                break;
-
-            case "report_sales_yearly":
-                ob_start();
-                require_once("template_receive.php");
+                require_once("template_sales.php");
                 $dompdf->loadHtml(ob_get_clean());
                 $dompdf->setPaper('A4', 'potrait');
                 break;
 
             case "stockopname":
+                $idstockopname = $_REQUEST['idstockopname'];
                 ob_start();
                 require_once("template_stockopname.php");
                 $dompdf->loadHtml(ob_get_clean());
-                $dompdf->setPaper('A4', 'potrait');
+                $dompdf->setPaper('A4', 'landscape');
                 break;
         }
 

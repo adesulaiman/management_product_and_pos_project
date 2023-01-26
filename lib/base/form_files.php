@@ -270,7 +270,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         var rowData = dt.rows(".selected").data()[0];
 
         if (rowData == null) {
-          alert('Mohon pilih data terlebih dahulu');
+          alert('Please Select Data !!');
         } else {
           var dokumenDownload = rowData.id_file_name;
           DownloadFile('assets/upload/' + dokumenDownload, dokumenDownload);

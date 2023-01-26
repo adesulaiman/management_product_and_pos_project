@@ -175,7 +175,7 @@ $('.filterAdvCheck').click(function(){
               
               if(rowData == null)
               {
-                alert('Mohon pilih data terlebih dahulu');
+                alert('Please Select Data !!');
               }else{
                 loadForm(rowData.id, "edit");
               }
@@ -190,7 +190,7 @@ $('.filterAdvCheck').click(function(){
               
               if(rowData == null)
               {
-                alert('Mohon pilih data terlebih dahulu');
+                alert('Please Select Data !!');
               }else{
                 loadFormTw(rowData.id, "delete");
               }

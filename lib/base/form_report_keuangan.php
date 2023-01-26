@@ -148,7 +148,7 @@ $('.filterAdvCheck').click(function(){
               
               if(rowData == null)
               {
-                alert('Mohon pilih data terlebih dahulu');
+                alert('Please Select Data !!');
               }else{
                 window.open('<?php $dir ?>lib/base/runpdf.php?link=<?php echo $pdf?>.php?bulan='+rowData.id+'&format=potrait&pdfname='+rowData.keterangan, rowData.keterangan); 
               }

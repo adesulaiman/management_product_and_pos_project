@@ -163,7 +163,7 @@ if (isset($_SESSION['userid'])) {
               var rowData = dt.rows(".selected").data()[0];
 
               if (rowData == null) {
-                popup('error', 'Mohon pilih data terlebih dahulu', '');
+                popup('error', 'Please Select Data !!', '');
               } else {
                 var ckRoleMenu = [];
                 $.each($(".rolemenu:checked"), function() {
@@ -203,7 +203,7 @@ if (isset($_SESSION['userid'])) {
 
               if (rowData == null) {
 
-                popup('error', 'Mohon pilih data terlebih dahulu', '');
+                popup('error', 'Please Select Data !!', '');
               } else {
                 loadForm(rowData.id, "edit");
               }
@@ -217,7 +217,7 @@ if (isset($_SESSION['userid'])) {
               var rowData = dt.rows(".selected").data()[0];
 
               if (rowData == null) {
-                popup('error', 'Mohon pilih data terlebih dahulu', '');
+                popup('error', 'Please Select Data !!', '');
               } else {
                 loadFormTw(rowData.id, "delete");
               }

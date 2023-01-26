@@ -5,6 +5,7 @@ $dir = 'http://cahaya2goldjewellery.com/';  // http://cahaya2goldjewellery.com/
 
 $title = "Management Product and POS System";
 $organization = "Cahaya Gold & Jewellery"; 
+$addrOrg = "Jl setia budi no 45"; 
 $appname = "Management Product and POS System";
 $dbName = "u965363723_management";
 $dbUser = "u965363723_superuser";  //u965363723_superuser

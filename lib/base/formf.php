@@ -131,7 +131,7 @@ foreach($qForm as $valForm)
               
               if(rowData == null)
               {
-                alert('Mohon pilih data terlebih dahulu');
+                alert('Please Select Data !!');
               }else{
                 loadForm(rowData.id, "edit");
               }
@@ -146,7 +146,7 @@ foreach($qForm as $valForm)
               
               if(rowData == null)
               {
-                alert('Mohon pilih data terlebih dahulu');
+                alert('Please Select Data !!');
               }else{
                 loadFormTw(rowData.id, "delete");
               }

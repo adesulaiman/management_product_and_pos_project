@@ -237,7 +237,7 @@ $statusRecive = $receive[0]['status_receive'] == 'received' ? true : false;
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             loadForm(rowData.id, "edit");
           }
@@ -252,7 +252,7 @@ $statusRecive = $receive[0]['status_receive'] == 'received' ? true : false;
           var rowData = dt.rows(".selected").data()[0];
 
           if (rowData == null) {
-            alert('Mohon pilih data terlebih dahulu');
+            alert('Please Select Data !!');
           } else {
             loadFormTw(rowData.id, "delete");
           }

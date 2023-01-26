@@ -279,7 +279,7 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
             var rowData = dt.rows(".selected").data()[0];
 
             if (rowData == null) {
-              alert('Mohon pilih data terlebih dahulu');
+              alert('Please Select Data !!');
             } else {
               loadFormTw(rowData.id, "delete");
             }

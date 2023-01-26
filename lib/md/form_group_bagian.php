@@ -178,7 +178,7 @@ $('.filterAdvCheck').click(function(){
                 
                 if(rowData == null)
                 {
-                  popup('error', 'Mohon pilih data terlebih dahulu', ''); 
+                  popup('error', 'Please Select Data !!', ''); 
                 }else{
                 
                   var ckRoleLevel = [];
@@ -220,7 +220,7 @@ $('.filterAdvCheck').click(function(){
                 if(rowData == null)
                 {
                   
-                  popup('error', 'Mohon pilih data terlebih dahulu', ''); 
+                  popup('error', 'Please Select Data !!', ''); 
                 }else{
                   loadForm(rowData.id, "edit");
                 }
@@ -235,7 +235,7 @@ $('.filterAdvCheck').click(function(){
                 
                 if(rowData == null)
                 {
-                  popup('error', 'Mohon pilih data terlebih dahulu', ''); 
+                  popup('error', 'Please Select Data !!', ''); 
                 }else{
                   loadFormTw(rowData.id, "delete");
                 }

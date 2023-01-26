@@ -158,15 +158,30 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     buttons: [
       {
         text: '<i class="fa fa-search"></i> Search',
+        className:'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className:'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
+        }
+      },
+      {
+        text: '<i class="fa fa-file-pdf-o"></i> Detail Report',
+        className: 'btn btn-warning',
+        action: function(e, dt, node, config) {
+          var rowData = dt.rows(".selected").data()[0];
+
+          if (rowData == null) {
+            alert('Please Select Data !!');
+          } else {
+            report(rowData.id, rowData.month);
+          }
         }
       }
     ],
@@ -505,5 +520,10 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(fieldID).remove();
       });
     });
+  };
+
+
+  function report(id, bulan) {
+    window.open('./lib/report/generate_pdf.php?template=reportsales&idbulan=' + id + "&bulan=" + bulan);
   }
 </script>
