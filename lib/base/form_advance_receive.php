@@ -37,7 +37,8 @@ foreach ($qForm as $valForm) {
 //SHOW SCHEMA VIEW
 $qSchemaView = $adeQ->select($adeQ->prepare(
   "select * from information_schema.columns where table_name=%s and table_schema=%s order by ordinal_position",
-  $formView, $dbName
+  $formView,
+  $dbName
 ));
 
 ?>
@@ -140,7 +141,9 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     },
     "searching": false,
     "scrollX": true,
-    order: [[ 0, "desc" ]] ,
+    order: [
+      [0, "desc"]
+    ],
     scrollCollapse: true,
     "lengthMenu": [
       [10, 25, 50, -1],
@@ -157,7 +160,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     ],
     buttons: [{
         text: '<i class="fa fa-plus-circle"></i> Add',
-        className : 'btn btn-default',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           loadForm(null, "add");
 
@@ -165,7 +168,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-pencil-square-o"></i> Edit',
-        className : 'btn btn-default',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -180,7 +183,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-trash-o"></i> Delete',
-        className : 'btn btn-danger',
+        className: 'btn btn-danger',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -193,17 +196,30 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-search"></i> Search',
-        className : 'btn btn-default',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
-        className : 'btn btn-default',
+        className: 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
+        }
+      },
+      {
+        text: '<i class="fa fa-file-pdf-o"></i> Report',
+        className: 'btn btn-warning',
+        action: function(e, dt, node, config) {
+          var rowData = dt.rows(".selected").data()[0];
+
+          if (rowData == null) {
+            alert('Mohon pilih data terlebih dahulu');
+          } else {
+            report(rowData.id);
+          }
         }
       }
     ],
@@ -263,7 +279,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           table.draw(false);
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
-        }else{
+        } else {
           popup('error', msg.msg, '');
         }
 
@@ -275,7 +291,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         popup('error', err.responseText, '');
       }
     });
-  })
+  });
 
 
 
@@ -544,5 +560,10 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(fieldID).remove();
       });
     });
+  };
+
+
+  function report(id) {
+    window.open('./lib/report/generate_pdf.php?template=receive&id_receive=' + id);
   }
 </script>

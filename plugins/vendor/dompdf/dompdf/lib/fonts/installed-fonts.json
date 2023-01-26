@@ -1,0 +1,14 @@
+{
+    "grand-hotel": {
+        "normal": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "bold": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "bold_italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular"
+    },
+    "source-sans": {
+        "normal": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "bold": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "bold_italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular"
+    }
+}

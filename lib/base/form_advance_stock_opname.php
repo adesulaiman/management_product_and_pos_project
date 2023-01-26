@@ -160,6 +160,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     ],
     buttons: [{
         text: '<i class="fa fa-plus-circle"></i> Add',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           loadForm(null, "add");
 
@@ -167,6 +168,7 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-trash-o"></i> Cancel',
+        className : 'btn btn-danger',
         action: function(e, dt, node, config) {
           var rowData = dt.rows(".selected").data()[0];
 
@@ -179,15 +181,30 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
       },
       {
         text: '<i class="fa fa-search"></i> Search',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
+        }
+      },
+      {
+        text: '<i class="fa fa-file-pdf-o"></i> Report',
+        className: 'btn btn-warning',
+        action: function(e, dt, node, config) {
+          var rowData = dt.rows(".selected").data()[0];
+
+          if (rowData == null) {
+            alert('Mohon pilih data terlebih dahulu');
+          } else {
+            report(rowData.id);
+          }
         }
       }
     ],
@@ -528,5 +545,9 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
         $(fieldID).remove();
       });
     });
+  }
+
+  function report(id) {
+    window.open('./lib/report/generate_pdf.php?template=stockopname&id_receive=' + id);
   }
 </script>

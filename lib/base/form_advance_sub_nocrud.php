@@ -167,12 +167,14 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
     ],
     buttons: [{
         text: '<i class="fa fa-search"></i> Search',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           loadFormTw(null, "search");
         }
       },
       {
         text: '<i class="fa fa-refresh"></i> Refresh',
+        className : 'btn btn-default',
         action: function(e, dt, node, config) {
           $('.queryFilter').val('');
           table.draw();
