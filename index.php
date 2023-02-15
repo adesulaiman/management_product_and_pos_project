@@ -46,7 +46,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="<?php echo $dir ?>plugins/iCheck/all.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo $dir ?>plugins/dist/css/AdminLTE.min.css?v=1">
+  <link rel="stylesheet" href="<?php echo $dir ?>plugins/dist/css/AdminLTE.min.css?v=2">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?php echo $dir ?>plugins/dist/css/skins/_all-skins.min.css">
@@ -526,7 +526,7 @@ $getGroup = $adeQ->select($adeQ->prepare(
         sep = sep || "."; // Default to period as decimal separator
         decimals = decimals || 2; // Default to 2 decimals
 
-        return n.toLocaleString().split(sep)[0] +
+        return n.toLocaleString("en-IE").split(sep)[0] +
           sep +
           n.toFixed(decimals).split(sep)[1];
       }

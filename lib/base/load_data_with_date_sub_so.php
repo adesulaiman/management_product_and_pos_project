@@ -19,12 +19,12 @@ if(isset($_SESSION['userid']))
 				p.id,
 				p.id_stock_opname,
 				p.barcode id_barcode,
-				p.id_gram_product,
+				p.id_brutto_gram_product,
 				p.storage_name,
 				concat(p.barcode, ' - ', p.product_name) product,
-				concat(p.qty_phisycal, ' pcs (',p.gram_phisycal,' Gr)') physical_stock,
-				concat(p.qty_stock, ' pcs (',p.gram,' Gr)') system_stock,
-				concat(p.qty_adjusment, ' pcs (',p.gram_adjusment,' Gr)') adjusment,
+				concat(p.qty_phisycal, ' pcs (',p.gram_phisycal,' Brutto Gr)') physical_stock,
+				concat(p.qty_stock, ' pcs (',p.brutto_gram,' Brutto Gr)') system_stock,
+				concat(p.qty_adjusment, ' pcs (',p.brutto_gram_adjusment,' Brutto Gr)') adjusment,
 				case 
 					when p.gap_qty < 0 then concat('<span style=\"color:red;font-size:17px\">',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
 					when p.gap_qty = 0 then concat('<span style=\"color:blue;font-size:17px\">',p.gap_qty, ' pcs (',p.gap_gram,' Gr)','</span>')
@@ -39,14 +39,15 @@ if(isset($_SESSION['userid']))
 					d.barcode,
 					d.product_name,
 					d.qty_phisycal,
-					p.gram id_gram_product,
-					d.qty_phisycal * coalesce(p.gram, 0) gram_phisycal,
+					p.netto_gram id_netto_gram_product,
+					p.brutto_gram id_brutto_gram_product,
+					d.qty_phisycal * coalesce(p.brutto_gram, 0) gram_phisycal,
 					coalesce(s.qty_stock, 0) qty_stock,
-					coalesce(s.gram, 0) gram,
+					coalesce(s.brutto_gram, 0) brutto_gram,
 					coalesce(d.qty_adjusment, 0) qty_adjusment,
-					coalesce(d.qty_adjusment, 0) * coalesce(p.gram, 0) gram_adjusment,
+					coalesce(d.qty_adjusment, 0) * coalesce(p.brutto_gram, 0) brutto_gram_adjusment,
 					(d.qty_phisycal - coalesce(s.qty_stock, 0)) + coalesce(d.qty_adjusment, 0)  gap_qty,
-					((d.qty_phisycal * coalesce(p.gram, 0) ) - coalesce(s.gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.gram, 0)) gap_gram
+					((d.qty_phisycal * coalesce(p.brutto_gram, 0) ) - coalesce(s.brutto_gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.brutto_gram, 0)) gap_gram
 					from data_stock_opname_detail d
 					left join data_product p on d.barcode=p.barcode
 					left join data_category_storage c on d.id_category_storage = c.id
@@ -64,9 +65,9 @@ if(isset($_SESSION['userid']))
 				'' id_gram_product,
 				p.storage_name,
 				concat(p.barcode, ' - ', p.product_name) product,
-				concat(p.qty_phisycal, ' pcs (',p.gram_physycal,' Gr)') physical_stock,
-				concat(p.qty_stock, ' pcs (',p.gram_stock,' Gr)') system_stock,
-				concat(p.qty_adjusment, ' pcs (',p.gram_adjusment,' Gr)') adjusment,
+				concat(p.qty_phisycal, ' pcs (',p.brutto_gram_physycal,' Brutto Gr)') physical_stock,
+				concat(p.qty_stock, ' pcs (',p.brutto_gram_stock,' Brutto Gr)') system_stock,
+				concat(p.qty_adjusment, ' pcs (',p.brutto_gram_adjusment,' Brutto Gr)') adjusment,
 				case 
 					when p.qty_diff < 0 then concat('<span style=\"color:red;font-size:17px\">',p.qty_diff, ' pcs (',p.gram_diff,' Gr)','</span>')
 					when p.qty_diff = 0 then concat('<span style=\"color:blue;font-size:17px\">',p.qty_diff, ' pcs (',p.gram_diff,' Gr)','</span>')
@@ -82,13 +83,13 @@ if(isset($_SESSION['userid']))
 					d.barcode,
 					d.product_name,
 					d.qty_phisycal,
-					d.gram_physycal,
+					d.brutto_gram_physycal,
 					d.qty_stock,
-					d.gram_stock,
+					d.brutto_gram_stock,
 					d.qty_adjusment,
-					d.gram_adjusment,
+					d.brutto_gram_adjusment,
 					d.qty_diff,
-					d.gram_diff,
+					d.brutto_gram_diff gram_diff,
 					d.created_by,
 					d.created_date
 					from data_stock_opname_detail_report d

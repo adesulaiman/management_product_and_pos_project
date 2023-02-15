@@ -29,6 +29,23 @@ if(isset($_SESSION['userid']))
 						"product" => ""
 					]);
 				}
+			}else if($mode == "label"){
+				$data = $adeQ->select($adeQ->prepare("select d.*, d.barcode uniq_barcode 
+				from data_product d  
+				where d.barcode = %s and d.is_delete = 0", $barcode));
+				if(!empty($data)){
+					echo json_encode([
+						"status" => "success",
+						"info" => "Product Added",
+						"product" => $data
+					]);
+				}else{
+					echo json_encode([
+						"status" => "error",
+						"info" => "Product out of stock or not  !!",
+						"product" => ""
+					]);
+				}
 			}else{
 				echo json_encode([
 					"status" => "error",

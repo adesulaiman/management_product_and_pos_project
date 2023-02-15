@@ -121,7 +121,8 @@ require "../base/security_login.php";
                       <tr>
                         <th>Product Name</th>
                         <th>Product Code</th>
-                        <th style="width: 100px;">Gram</th>
+                        <th style="width: 100px;">Netto</th>
+                        <th style="width: 100px;">Brutto</th>
                         <th style="width: 90px;">Qty</th>
                         <th>@ Price</th>
                         <th>Total</th>
@@ -663,7 +664,8 @@ require "../base/security_login.php";
             var template = `<tr>
                         <td>` + val.product_name + ` (` + val.kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">`+val.storage_name+`</small></td>
                         <td>`+val.id_category_storage+`-` + val.barcode + `</td>
-                        <td>` + val.gram + `</td>
+                        <td>` + val.netto_gram + `</td>
+                        <td>` + val.brutto_gram + `</td>
                         <td>` + val.qty + `</td>
                         <td>` + format(Number(val.price)) + `</td>
                         <td><span class="totalPrice">` + format(Number(val.price) * Number(val.qty)) + `</span></td>

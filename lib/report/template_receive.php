@@ -5,6 +5,7 @@ require "../base/db.php";
 $receive = $adeQ->select("
     select 
     concat(d.barcode, ' - ', d.product_name) product,
+    r.type_receive,
     format(qty_receive,2) qty_receive,
     format(total_gram,2) total_gram,
     total_price,
@@ -20,7 +21,7 @@ $receive = $adeQ->select("
 
 $receiveDate = date("d F Y", strtotime($receive[0]['receive_date']));
 $receiveby = $receive[0]['created_by'];
-$status_receive = $receive[0]['status_receive'];
+$status_receive = $receive[0]['status_receive'] . " (".$receive[0]['type_receive'].")";
 $no_invoice = $receive[0]['no_invoice'];
 ?>
 

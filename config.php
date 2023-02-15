@@ -1,11 +1,11 @@
 <?php
 
 $path = "..";
-$dir = 'http://cahaya2goldjewellery.com/';  // http://cahaya2goldjewellery.com/
+$dir = 'https://cahaya2goldjewellery.com/';  // http://cahaya2goldjewellery.com/
 
 $title = "Management Product and POS System";
-$organization = "Cahaya Gold & Jewellery"; 
-$addrOrg = "Jl setia budi no 45"; 
+$organization = "Sahabat Cahaya gold & jewellery"; 
+$addrOrg = "Jln. RA. Kartini no 89 Sulawesi Selatan Kel/Ds. Kec. Tempe - Wajo Sulawesi Selatan"; 
 $appname = "Management Product and POS System";
 $dbName = "u965363723_management";
 $dbUser = "u965363723_superuser";  //u965363723_superuser
@@ -21,6 +21,8 @@ $maxTryLogin = 99;
 $expired_login = 90000; //time per second
 $login_method = 'password'; // otp or password
 $expired_otp = 10; // in minutes
+
+date_default_timezone_set('Asia/Jakarta');
 
 
 ?>

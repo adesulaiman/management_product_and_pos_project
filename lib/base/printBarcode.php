@@ -16,7 +16,8 @@ if (isset($_SESSION['userid'])) {
 		for($h=0 ; $h < $product['qtyPrint']; $h++){
 			$data[] = [
 				"barcode" => $product['barcode'],
-				"price" =>  number_format($product['gram'], 2) . " gr"
+				"netto" =>  number_format($product['netto_gram'], 2) . " gr",
+				"brutto" =>  number_format($product['brutto_gram'], 2) . " gr"
 			];
 		}
 	}
@@ -60,11 +61,16 @@ if (isset($_SESSION['userid'])) {
 		$marginlrProses = $marginlr;
 		for($i = 1 ; $i <= $columnloop; $i++){
 			$code = $data[$loopRow]['barcode'];
-			$harga = $data[$loopRow]['price'];
+			$netto = $data[$loopRow]['netto'];
+			$brutto = $data[$loopRow]['brutto'];
 			$pdf->Code128($marginlrProses, $margintbProses, $code, $labelwidth - 5, $labelhight - 4);
 			$pdf->SetFont('Arial', '', 4);
-			$pdf->SetXY($marginlrProses + 6, $margintbProses + 7);
-			$pdf->Write(4,  $harga);
+			$pdf->SetXY($marginlrProses + 2, $margintbProses + 7);
+			$pdf->Write(4,  $netto);
+			$pdf->SetXY($marginlrProses + 12, $margintbProses + 7);
+			$pdf->SetTextColor(194,8,8);
+			$pdf->Write(4,  $brutto);
+			$pdf->SetTextColor(0,0,0);
 			$pdf->SetFont('Arial', '', 7);
 			$pdf->TextWithDirection($marginlrProses + $labelwidth - 4.5, $margintbProses , $code ,'D');
 			$marginlrProses = $marginlrProses + $labelwidth + $gap;

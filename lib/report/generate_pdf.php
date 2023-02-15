@@ -36,6 +36,42 @@ if (isset($_SESSION['userid'])) {
                 $dompdf->setPaper('A4', 'potrait');
                 break;
 
+            case "nota_reseller":
+
+                $struk = $_REQUEST['struk'];
+                ob_start();
+                require_once("template_reseller.php");
+                $dompdf->loadHtml(ob_get_clean());
+                $dompdf->setPaper('A4', 'potrait');
+                break;
+
+            case "nota_os":
+
+                $struk = $_REQUEST['struk'];
+                ob_start();
+                require_once("template_os.php");
+                $dompdf->loadHtml(ob_get_clean());
+                $dompdf->setPaper('A4', 'potrait');
+                break;
+
+            case "cashflow":
+
+                $tanggal = $_REQUEST['tanggal'];
+                ob_start();
+                require_once("template_cashflow.php");
+                $dompdf->loadHtml(ob_get_clean());
+                $dompdf->setPaper('A4', 'potrait');
+                break;
+
+            case "nota_installment":
+
+                $struk = $_REQUEST['struk'];
+                ob_start();
+                require_once("template_installment.php");
+                $dompdf->loadHtml(ob_get_clean());
+                $dompdf->setPaper('A4', 'potrait');
+                break;
+
             case "reportsales":
                 $idbulan = $_REQUEST['idbulan'];
                 $bulan = $_REQUEST['bulan'];
@@ -49,6 +85,14 @@ if (isset($_SESSION['userid'])) {
                 $idstockopname = $_REQUEST['idstockopname'];
                 ob_start();
                 require_once("template_stockopname.php");
+                $dompdf->loadHtml(ob_get_clean());
+                $dompdf->setPaper('A4', 'landscape');
+                break;
+
+            case "stockweight":
+                $idstockopname = $_REQUEST['idstockopname'];
+                ob_start();
+                require_once("template_stockweight.php");
                 $dompdf->loadHtml(ob_get_clean());
                 $dompdf->setPaper('A4', 'landscape');
                 break;

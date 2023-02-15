@@ -125,7 +125,8 @@ $nostruk = uniqid();
                         <th style="width: 10px;">Action</th>
                         <th>Product Name</th>
                         <th style="width: 150px;">Product Code</th>
-                        <th style="width: 100px;">Gram</th>
+                        <th style="width: 100px;">Netto</th>
+                        <th style="width: 100px;">Brutto</th>
                         <th style="width: 90px;">Qty</th>
                         <th>@ Price</th>
                         <th>Total</th>
@@ -711,7 +712,8 @@ $nostruk = uniqid();
             vListProduct[uniqid] = {
               "productName": msg.product[selectStorage].product_name,
               "barcode": msg.product[selectStorage].uniq_barcode,
-              "gram": msg.product[selectStorage].gram,
+              "netto_gram": msg.product[selectStorage].netto_gram,
+              "brutto_gram": msg.product[selectStorage].brutto_gram,
               "qty": 1,
               "price": msg.product[selectStorage].sell_price
             };
@@ -720,7 +722,8 @@ $nostruk = uniqid();
                         <td><button class="btn btn-danger btn-xs btn-delete-item" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button></td>
                         <td>` + msg.product[selectStorage].product_name + ` (` + msg.product[selectStorage].kadar_product + ` karat) <small style="font-weight: 100;margin-top: 2px;" class="label bg-orange">` + msg.product[selectStorage].storage_name + `</small></td>
                         <td>` + msg.product[selectStorage].uniq_barcode + `</td>
-                        <td>` + msg.product[selectStorage].gram + `</td>
+                        <td>` + msg.product[selectStorage].netto_gram + `</td>
+                        <td>` + msg.product[selectStorage].brutto_gram + `</td>
                         <td><input type="number" class="form-control input-sm qtyInput qty` + uniqid + `" data-id="` + uniqid + `" value="1"></td>
                         <td><input type="number" class="form-control input-sm priceInput price` + uniqid + `" data-id="` + uniqid + `" value="` + msg.product[selectStorage].sell_price + `"></td>
                         <td><span class="totalInput` + uniqid + ` totalPrice">` + format(Number(msg.product[selectStorage].sell_price)) + `</span></td>

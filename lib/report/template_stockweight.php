@@ -2,27 +2,28 @@
 require "../../config.php";
 require "../base/db.php";
 
-// $idbulan= '012023';
-// $bulan= 'January 2023';
+//cek if SO is commited
+$cekSO = $adeQ->select($adeQ->prepare("select * from data_stock_weight where id=%s", $idstockopname));
+$isCommit = 0;
+if ($cekSO[0]['status'] == "" || $cekSO[0]['status'] == "open") {
+  $isCommit = 1;
+}
 
-$sales = $adeQ->select("
-select 
-d.no_struk,
-format((d.payment_cash + d.payment_trasnfer + d.payment_debit + d.payment_credit + d.payment_dp),2) total_sales,
-concat(s.barcode, ' - ', s.product_name) product,
-format(s.qty,2) qty, 
-format(s.qty * s.netto_gram,2) netto_gram,
-format(s.qty * s.brutto_gram,2) brutto_gram,
-format(s.qty * s.price, 2) sales,
-s.sales_date,
-s.created_by cashier
-from data_sales_detail s left join 
-data_sales d  on d.no_struk=s.no_struk
-where DATE_FORMAT(d.sales_date, \"%m%Y\") = '$idbulan'
-order by d.no_struk, s.sales_date desc
-");
+if ($isCommit) {
+    $stockopname = $adeQ->select("
+        select * from vw_data_stock_weight where id_stock_weight = $idstockopname
+    ");
+} else {
+    $stockopname = $adeQ->select("
+        select * from data_stock_weight_detail_hist where id_stock_weight = $idstockopname
+    ");
+}
 
 
+$receiveDate = date("d F Y", strtotime($cekSO[0]['stock_date']));
+$receiveby = $cekSO[0]['created_by'];
+$status_receive = $cekSO[0]['status'];
+$no_invoice = $cekSO[0]['stock_info'];
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +33,7 @@ order by d.no_struk, s.sales_date desc
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Sales <?php echo $bulan ?></title>
+    <title>Report Stock Opname</title>
 
 
 
@@ -83,52 +84,61 @@ order by d.no_struk, s.sales_date desc
     <hr>
     <div class="row">
         <div class="col-xs-12 text-center">
-            <h3>Report Sales Period <?php echo $bulan?></h3>
+            <h3>Report Stock Weight</h3>
         </div>
     </div>
 
-    <div class="row" style="margin-top:30px">
+    <div class="row">
+        <div class="col-xs-4">
+            <table class="table tablenoborder">
+                <tr>
+                    <td>Stock Weight Info </td>
+                    <td>: <?php echo $no_invoice ?></td>
+                </tr>
+                <tr>
+                    <td>Stock Weight Date</td>
+                    <td>: <?php echo $receiveDate ?></td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>: <?php echo $status_receive ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
         <table class="table table-bordered">
-            <thead >
-                <tr style="background:grey;color:white">
-                    <td><b>Product</b></td>
-                    <td><b>Qty</b></td>
-                    <td><b>Netto</b></td>
-                    <td><b>Brutto</b></td>
-                    <td><b>Sales</b></td>
-                    <td><b>Sales Date</b></td>
-                    <td><b>Cashier</b></td>
+            <thead>
+                <tr>
+                    <td>No</td>
+                    <td>Storage Name</td>
+                    <td>Opening Gram</td>
+                    <td>Closing Gram</td>
+                    <td>SS Gram Storage</td>
+                    <td>Difference with Closing Weight</td>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
+                $total = 0;
                 $boxlast = "";
-                foreach ($sales as $sel) {
-                    $boxfirst = $sel["no_struk"];
+                foreach ($stockopname as $rec) {
+                    $boxfirst = $rec["storage_name"];
 
-                    if ($boxfirst != $boxlast) {
-                        $i = 1;
-                        echo "
-                        <tr style='font-size:18px'>
-                            <td colspan='6'>Bill No : $sel[no_struk] <p style='float:right'>Total : Rp $sel[total_sales]</p></td>
-                        </tr>
-                        ";
-                    }
 
                     echo "
                         <tr>
-                            <td>$sel[product]</td>
-                            <td>$sel[qty]</td>
-                            <td>$sel[netto_gram]</td>
-                            <td>$sel[brutto_gram]</td>
-                            <td>$sel[sales]</td>
-                            <td>$sel[sales_date]</td>
-                            <td>$sel[cashier]</td>
+                            <td>$i</td>
+                            <td>$rec[storage_name]</td>
+                            <td>$rec[opening_gram]</td>
+                            <td>$rec[closing_gram]</td>
+                            <td>$rec[SS_gram_storage_update]</td>
+                            <td>$rec[weight_closing_vs_SS_update]</td>
                         </tr>
                     ";
 
-                    $boxlast = $sel["no_struk"];
                 }
                 ?>
             </tbody>

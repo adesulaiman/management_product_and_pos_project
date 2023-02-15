@@ -6,76 +6,21 @@ require "../base/db.php";
 $sales_detail = $adeQ->select("
 select 
 concat(barcode, ' - ', product_name) product,
-format(qty, 2 ) qty,
-format(qty * netto_gram, 2) netto_gram,
-format(qty * brutto_gram, 2) brutto_gram,
-format(qty * price, 2) price
-from data_sales_detail
-where no_struk='$struk'
+format(qty_out, 2 ) qty,
+format(qty_out * netto_gram_out, 2) gram,
+format(pen, 2) pen,
+format(qty_out * netto_gram_out * pen / 100, 3)  kadar
+from data_product_out_os_detail
+where invoice='$struk'
 ");
 
 $sales = $adeQ->select("
 select 
-(payment_cash + payment_trasnfer + payment_debit + payment_credit + payment_dp) total_sales,
-d.*
-from data_sales d
-where no_struk='$struk'
+*
+from data_product_out_os d
+where invoice='$struk'
 ");
 
-$container = "";
-
-if ($sales[0]['payment_cash'] > 0) {
-    $container .= "
-        <tr>
-            <td>Cash </td>
-            <td>Rp " . number_format($sales[0]['payment_cash'], 2) . "</td>
-        </tr>
-    ";
-}
-
-
-if ($sales[0]['payment_trasnfer'] > 0) {
-    $container .= "
-        <tr>
-            <td>Transfer </td>
-            <td>Rp " . number_format($sales[0]['payment_trasnfer'], 2) . "</td>
-        </tr>
-    ";
-}
-
-if ($sales[0]['payment_debit'] > 0) {
-    $container .= "
-        <tr>
-            <td>Debit </td>
-            <td>Rp " . number_format($sales[0]['payment_debit'], 2) . "</td>
-        </tr>
-    ";
-}
-
-if ($sales[0]['payment_credit'] > 0) {
-    $container .= "
-        <tr>
-            <td>Credit </td>
-            <td>Rp " . number_format($sales[0]['payment_credit'], 2) . "</td>
-        </tr>
-    ";
-}
-
-if ($sales[0]['payment_dp'] > 0) {
-    $container .= "
-        <tr>
-            <td>DP </td>
-            <td>Rp " . number_format($sales[0]['payment_dp'], 2) . "</td>
-        </tr>
-    ";
-}
-
-$container .= "
-    <tr style='font-size:20px'>
-        <td>Change </td>
-        <td>Rp " . number_format($sales[0]['change_payment'], 2) . "</td>
-    </tr>
-";
 
 ?>
 
@@ -137,7 +82,9 @@ $container .= "
     <hr>
     <div class="row">
         <div class="col-xs-12 text-center">
-            <h3>Bill No <?php echo $struk ?></h3>
+            <h3>Invoice Other Store : <?php echo $struk ?></h3>
+            <h5>Date : <?php echo date("d F Y", strtotime($sales[0]['created_date'])) ?></h5>
+            <p>Target Store Name : <?php echo $sales[0]['storename'] ?></p>
         </div>
     </div>
 
@@ -147,14 +94,15 @@ $container .= "
                 <tr style="background:grey;color:white">
                     <td><b>Product</b></td>
                     <td><b>Qty</b></td>
-                    <td><b>Netto</b></td>
-                    <td><b>Brutto</b></td>
-                    <td><b>Price</b></td>
+                    <td><b>Netto Gram</b></td>
+                    <td><b>Pen</b></td>
+                    <td><b>Emas Murni</b></td>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
+                $total = 0;
                 foreach ($sales_detail as $sel) {
 
 
@@ -162,16 +110,17 @@ $container .= "
                         <tr>
                             <td>$sel[product]</td>
                             <td>$sel[qty]</td>
-                            <td>$sel[netto_gram] Gr</td>
-                            <td>$sel[brutto_gram] Gr</td>
-                            <td class='text-right'>$sel[price]</td>
+                            <td>$sel[gram]</td>
+                            <td>$sel[pen]%</td>
+                            <td class='text-right'>$sel[kadar]</td>
                         </tr>
                     ";
+                    $total += $sel["kadar"];
                 }
                 ?>
                 <tr style="font-size:20px">
-                    <td colspan="4"><b>Total</b></td>
-                    <td colspan="1" class="text-right"><b>Rp <?php echo number_format($sales[0]['total_amount'], 2) ?></b></td>
+                    <td colspan="4"><b>Total Emas Murni</b></td>
+                    <td colspan="1" class="text-right"><b><?php echo number_format($total, 3) ?></b></td>
                 </tr>
             </tbody>
         </table>
@@ -183,11 +132,6 @@ $container .= "
                 <br>
                 <p style="color:black;"><?php echo $sales[0]['created_by'] ?></p>
                 <p style="color:black;font-family:'Grand-Hotel';margin:0"><?php echo $organization ?></p>
-            </div>
-            <div class="col-xs-5">
-                <table class="table tablenoborder text-right" style="font-size:18px">
-                    <?php echo $container ?>
-                </table>
             </div>
         </div>
 

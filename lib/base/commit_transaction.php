@@ -161,7 +161,7 @@ if (isset($_SESSION['userid'])) {
 					$barcodeStorage = explode("-", $val1['barcode']);
 					$barcode = $barcodeStorage[1];
 					$storageid = $barcodeStorage[0];
-					$detailSalesIns[] = "('$nostruk', '$barcode', '$val1[productName]', $val1[qty], $val1[gram], $val1[price], '".date("Y-m-d H:i:s")."', $storageid,  '$_SESSION[userid]', '".date("Y-m-d H:i:s")."' )";
+					$detailSalesIns[] = "('$nostruk', '$barcode', '$val1[productName]', $val1[qty], $val1[netto_gram], $val1[brutto_gram], $val1[price], '".date("Y-m-d H:i:s")."', $storageid,  '$_SESSION[userid]', '".date("Y-m-d H:i:s")."' )";
 				}
 
 				$totalPayment = $payment_cash + $payment_transfer +	$payment_debit + $payment_credit + $payment_dp;
@@ -174,15 +174,15 @@ if (isset($_SESSION['userid'])) {
 				if ($ins) {
 
 					$ins2 = $adeQ->query(
-						"INSERT INTO `data_sales_detail`( `no_struk`, `barcode`, `product_name`, `qty`, `gram`, `price`, `sales_date`, id_category_storage,  `created_by`, `created_date`) 
+						"INSERT INTO `data_sales_detail`( `no_struk`, `barcode`, `product_name`, `qty`, `netto_gram`, brutto_gram, `price`, `sales_date`, id_category_storage,  `created_by`, `created_date`) 
 						VALUES " . implode(", ", $detailSalesIns)
 					);
 					if ($ins2) {
 						$updateStock = $adeQ->query("
 							UPDATE data_stock_product s inner join 
-							(select barcode, id_category_storage, sum(qty) qty, sum(qty*gram) gram from data_sales_detail where no_struk='$nostruk' group by barcode, id_category_storage) as d
+							(select barcode, id_category_storage, sum(qty) qty, sum(qty*netto_gram) netto_gram, sum(qty*brutto_gram) brutto_gram from data_sales_detail where no_struk='$nostruk' group by barcode, id_category_storage) as d
 							ON s.barcode = d.barcode and s.id_category_storage = d.id_category_storage
-							SET s.qty_stock = s.qty_stock - d.qty, s.gram = s.gram - d.gram, 
+							SET s.qty_stock = s.qty_stock - d.qty, s.brutto_gram = s.brutto_gram - d.brutto_gram, s.netto_gram = s.netto_gram - d.netto_gram, 
 							s.stock_date = '".date("Y-m-d H:i:s")."'
 						");
 

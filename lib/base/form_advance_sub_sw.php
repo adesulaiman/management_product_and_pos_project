@@ -53,9 +53,9 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
 ));
 
 //cek if SO is commited
-$cekSO = $adeQ->select($adeQ->prepare("select * from data_stock_opname where id=%s", $sub));
+$cekSO = $adeQ->select($adeQ->prepare("select * from data_stock_weight where id=%s", $sub));
 $isCommit = 0;
-if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] == "open") {
+if ($cekSO[0]['status'] == "" || $cekSO[0]['status'] == "open") {
   $isCommit = 1;
 }
 
@@ -82,41 +82,6 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
       <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-          <?php if ($isCommit) { ?>
-            <div class="row">
-              <div class="col-md-5">
-                <div class="input-group input-group-sm inputScanner">
-                  <input type="text" class="form-control inputProductScanner" maxlength="6" ,="" placeholder="Count stock, please search or input barcode product">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-info btn-flat searchProduct"><i class="fa fa-fw fa-search"></i> Search Product</button>
-                  </span>
-                </div>
-
-                <div class="input-group input-group-sm inputManual" style="display: none;">
-                  <select class="form-control select2 inputProductManual" style="width: 100%;">
-                    <option value="">-- Find Product --</option>
-                  </select>
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-success btn-flat addManual"><i class="fa fa-fw fa-plus-square"></i> Add</button>
-                    <button type="button" class="btn btn-danger btn-flat closeSearch"><i class="fa fa-close"></i> Close</button>
-                  </span>
-                </div>
-              </div>
-              <div class="col-md-4" style="padding:0px 2px">
-                <button class="btn btn-warning btnAdjusment"><i class="fa fa-fw fa-exchange"></i> Adjusment</button>
-              </div>
-              <div class="col-md-3">
-                <button class="btn btn-success btn-lg btn-block commitStock"><i class="fa fa-fw fa-refresh"></i> Commit Stock</button>
-              </div>
-            </div>
-          <?php } ?>
-          <div class="row rekapStock">
-
-
-
-          </div>
-          <hr>
-
 
           <table id="<?php echo $formName ?>" class="stripe row-border order-column table table-bordered table-striped nowrap">
             <thead>
@@ -170,7 +135,6 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
 
 <script>
   var countdata = {};
-  getRecapStock(<?php echo $sub ?>, <?php echo $isCommit ?>);
 
   $('.datepicker').datepicker({
     format: '<?php echo $dateJS ?>',
@@ -249,7 +213,7 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
     "processing": true,
     "serverSide": true,
     "ajax": {
-      "url": "./lib/base/load_data_with_date_sub_so.php?iscommit=<?php echo $isCommit ?>&w=<?php echo $qFieldSub[0]['name_field'] . '=' . $sub; ?>&t=<?php echo $formView ?>&f=<?php echo $f ?>",
+      "url": "./lib/base/load_data_with_date_sub_sw.php?iscommit=<?php echo $isCommit ?>&w=<?php echo $qFieldSub[0]['name_field'] . '=' . $sub; ?>&t=<?php echo $formView ?>&f=<?php echo $f ?>",
       "data": function(data) {
         var dtQuery = $(".queryFilter").val();
         data.query = dtQuery;
@@ -273,6 +237,29 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
     ],
     buttons: [
       <?php if ($isCommit) { ?> {
+          text: '<i class="fa fa-plus-circle"></i> Opening Weight',
+          className: 'btn btn-warning',
+          action: function(e, dt, node, config) {
+            loadForm(null, "add");
+
+          }
+        },
+        {
+          text: '<i class="fa fa-pencil-square-o"></i> Closing Weight',
+          className: 'btn btn-primary',
+          action: function(e, dt, node, config) {
+            var rowData = dt.rows(".selected").data()[0];
+
+            if (rowData == null) {
+              alert('Please Select Data !!');
+            } else {
+              loadForm(rowData.id, "edit");
+            }
+
+
+          }
+        },
+        {
           text: '<i class="fa fa-trash-o"></i> Delete',
           className: "btn btn-danger",
           action: function(e, dt, node, config) {
@@ -299,7 +286,55 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
           $('.queryFilter').val('');
           table.draw();
         }
+      },
+      <?php if ($isCommit) { ?>
+      {
+        text: '<i class="fa fa-check"></i> Commit Stock',
+        className: "btn btn-success btn-lg",
+        action: function(e, dt, node, config) {
+          swal({
+              title: "Commit Stock Weight ?",
+              text: "Once commit stock weight, you will not be able to back this stock weight !",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willtransaction) => {
+              if (willtransaction) {
+                $("#loading").removeClass("hide");
+
+                var formData = {
+                  f: 25,
+                  formType: "commit",
+                  id_stock: '<?php echo $sub ?>'
+                };
+
+                $.ajax({
+                  method: "POST",
+                  url: "./lib/base/save_data_with_date_sw_detail.php",
+                  data: formData,
+                  dataType: 'json',
+                  success: function(msg) {
+                    if (msg.status == 'success') {
+                      popup('success', msg.info, '');
+                      $(".back").click();
+                    } else {
+                      popup('error', msg.info, '');
+                    }
+
+                    $("#loading").addClass("hide");
+                  },
+                  error: function(err) {
+                    $("#loading").addClass("hide");
+                    popup('error', err.responseText, '');
+                  }
+                });
+              }
+
+            });
+        }
       }
+      <?php } ?>
     ],
     select: {
       style: 'single'
@@ -332,7 +367,7 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
 
     $.ajax({
       method: "POST",
-      url: "./lib/base/save_data_with_date_so_detail.php",
+      url: "./lib/base/save_data_with_date_sw_detail.php",
       data: dataFrom,
       processData: false,
       contentType: false,
@@ -353,7 +388,8 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
           table.draw(false);
           $('#Modal<?php echo $formName ?>').modal('toggle');
           popup('success', msg.msg, '');
-          getRecapStock(<?php echo $sub ?>, <?php echo $isCommit ?>);
+        } else {
+          popup('error', msg.msg, '');
         }
       },
       error: function(err) {
@@ -400,11 +436,15 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
   $(".formCount").on("click", function() {
     var category = $(".id_category_storage ").val();
     var qty_phisycal = $(".qty_phisycal ").val();
+    var gram_physycal = $(".gram_physycal ").val();
     var qty_adjusment = $(".qty_adjusment ").val();
+    var gram_adjusment = $(".gram_adjusment ").val();
 
     countdata["id_category_storage"] = category;
     countdata["qty_phisycal"] = qty_phisycal;
+    countdata["gram_physycal"] = gram_physycal;
     countdata["qty_adjusment"] = qty_adjusment;
+    countdata["gram_adjusment"] = gram_adjusment;
     countdata["f"] = '20';
     countdata["id_so"] = '<?php echo $sub ?>';
 
@@ -418,7 +458,6 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
           $('#Modal<?php echo $formName ?>').modal('hide');
           table.draw(false);
           popup('success', msg.info, '');
-          getRecapStock(<?php echo $sub ?>, <?php echo $isCommit ?>);
         } else {
           popup('error', msg.info, '');
         }
@@ -653,6 +692,14 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
         }
         ?>
 
+        if (type == "add") {
+          $(".closing_weight").attr("readonly", true);
+        } else if (type == "edit") {
+          $(".opening_weight").attr("readonly", true);
+          $(".id_category_storage").select2('destroy');
+          $(".id_category_storage").attr("readonly", true);
+        }
+
         $('.actFilter').css('display', 'none');
         $('.formCount').css('display', 'none');
         $('.formSubmit').css('display', 'inline');
@@ -738,123 +785,6 @@ if ($cekSO[0]['status_stock_opname'] == "" || $cekSO[0]['status_stock_opname'] =
         var fieldID = ".formRow" + fieldNum;
         $(fieldID).remove();
       });
-    });
-  }
-
-  function getRecapStock(idstock, iscommit) {
-    var dataPost = {
-      id_stock: idstock,
-      iscommit: iscommit
-    };
-    $.ajax({
-      method: "POST",
-      url: "./lib/base/loadrekapso.php",
-      data: dataPost,
-      dataType: 'json',
-      success: function(msg) {
-        if (msg.status == 'success') {
-          var dataRekp = "";
-
-          $.each(msg.data, function(idx, val) {
-            if (val.gap_qty < 0) {
-              dataRekp += `
-              <div class='col-md-3'>
-                <h4>` + val.storage_name + ` :  <span style='color:red'>` + format(Number(val.gap_qty)) + ` Pcs (` + val.gap_gram + ` Gr)</span></h4>
-              </div>`;
-            } else if (val.gap_qty == 0) {
-              dataRekp += `
-              <div class='col-md-3'>
-                <h4>` + val.storage_name + ` :  <span style='color:blue'>` + format(Number(val.gap_qty)) + ` Pcs (` + val.gap_gram + ` Gr)</span></h4>
-              </div>`;
-            } else {
-              dataRekp += `
-              <div class='col-md-3'>
-                <h4>` + val.storage_name + ` :  <span style='color:green'>+` + format(Number(val.gap_qty)) + ` Pcs (` + val.gap_gram + ` Gr)</span></h4>
-              </div>`;
-            }
-
-
-          });
-
-          $(".rekapStock").html(`<h3 style="margin-left: 20px;"><b>Total Recap Stock Opname</b></h3>` + dataRekp);
-        } else {
-          popup('error', 'Error get data', '');
-        }
-
-      },
-      error: function(err) {
-        popup('error', err.responseText, '');
-      }
-    });
-  }
-
-
-
-  function getProduct(dataForm) {
-
-    $.ajax({
-      method: "POST",
-      url: "./lib/base/getproduct.php",
-      data: dataForm,
-      dataType: 'json',
-      success: function(msg) {
-
-
-        if (msg.status == "success") {
-
-          var product = msg.product[0].product_name;
-          var barcode = msg.product[0].barcode;
-          var gram_product = msg.product[0].gram;
-
-          countdata["product"] = product;
-          countdata["barcode"] = barcode;
-          countdata["gram_product"] = gram_product;
-          countdata["formType"] = 'count';
-
-          $('#ModalText<?php echo $formName ?>').text("Count Stock : " + product + " (" + barcode + ")");
-
-          $('.formModal<?php echo $formName ?>').html(`
-          <div class="form-group grpuserid col-md-12">  
-          <label >Storage</label>
-            <select class="form-control id_category_storage" style="width:100%">
-              <option value="">-- Storage --</option>
-            </select>
-          </div>
-
-            <div class="form-group col-md-12">
-                <label for="userid">Qty Physic</label>
-                <input type="number" name="qty_phisycal" class="form-control qty_phisycal" placeholder="Qty Physical">
-                <span class="help-block erruserid"></span>
-            </div>
-          `);
-
-          $('.id_category_storage').select2({
-            ajax: {
-              url: './lib/base/select_data.php?t=vw_select_storage&filter=all',
-              dataType: 'json',
-              data: function(params) {
-                return {
-                  search: params.term
-                };
-              }
-            }
-          });
-
-          $('.actFilter').css('display', 'none');
-          $('.formSubmit').css('display', 'none');
-          $('.formCount').css('display', 'inline');
-
-          $('#Modal<?php echo $formName ?>').modal('show');
-
-        } else {
-          popup('error', msg.info, '');
-        }
-
-      },
-      error: function(err) {
-        console.log(err);
-        popup('error', err.responseText, '');
-      }
     });
   }
 </script>

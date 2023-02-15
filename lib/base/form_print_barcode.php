@@ -56,7 +56,8 @@ $formDesc = "Print Barcode";
                   <th>Action</th>
                   <th>Barcode</th>
                   <th>Product Name</th>
-                  <th>Gram</th>
+                  <th>Netto</th>
+                  <th>Brutto</th>
                   <th>Sell Price</th>
                   <th>Qty Print</th>
                 </tr>
@@ -147,7 +148,8 @@ $formDesc = "Print Barcode";
       $("#loading").removeClass("hide");
 
       var dataForm = {
-        "barcode": barcode
+        "barcode": barcode,
+        "mode" : "label"
       }
 
       $.ajax({
@@ -162,7 +164,8 @@ $formDesc = "Print Barcode";
             printValue[uniqid] = {
               "barcode": msg.product[0].barcode,
               "product_name": msg.product[0].product_name,
-              "gram": msg.product[0].gram,
+              "netto_gram": msg.product[0].netto_gram,
+              "brutto_gram": msg.product[0].brutto_gram,
               "sell_price": msg.product[0].sell_price,
               "qtyPrint": qtyPrint,
             };
@@ -171,7 +174,8 @@ $formDesc = "Print Barcode";
               `<button class="btn btn-danger btn-xs btnDelete" data-id="` + uniqid + `"><i class="fa fa-fw fa-trash"></i></button>`,
               msg.product[0].barcode,
               msg.product[0].product_name + ` (` + msg.product[0].description + `)`,
-              msg.product[0].gram,
+              msg.product[0].netto_gram,
+              msg.product[0].brutto_gram,
               'Rp ' + format(Number(msg.product[0].sell_price)),
               qtyPrint
             ]).draw(false);

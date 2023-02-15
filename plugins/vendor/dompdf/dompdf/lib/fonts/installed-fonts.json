@@ -1,14 +1,14 @@
 {
     "grand-hotel": {
-        "normal": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
-        "bold": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
-        "italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular",
-        "bold_italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/GrandHotel-Regular"
+        "normal": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "bold": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "italic": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/GrandHotel-Regular",
+        "bold_italic": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/GrandHotel-Regular"
     },
     "source-sans": {
-        "normal": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
-        "bold": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
-        "italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular",
-        "bold_italic": "C:\\applications\\xampp\\htdocs\\applications\\management_product_and_pos_project\\plugins\\vendor\\dompdf\\dompdf\/lib\/fonts\/SourceSansPro-Regular"
+        "normal": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "bold": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "italic": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/SourceSansPro-Regular",
+        "bold_italic": "\/home\/u965363723\/domains\/cahaya2goldjewellery.com\/public_html\/plugins\/vendor\/dompdf\/dompdf\/lib\/fonts\/SourceSansPro-Regular"
     }
 }

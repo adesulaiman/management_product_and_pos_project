@@ -476,6 +476,13 @@ $qSchemaView = $adeQ->select($adeQ->prepare(
           }
         }
         ?>
+        
+        if(type == "add"){
+            var n = Math.floor(Math.random() * 11);
+            var k = Math.floor(Math.random() * 1000000);
+            var m = String.fromCharCode(n) + k;
+            $("[name=no_invoice]").val("INV-"+Math.random().toString(36).slice(2).toUpperCase());
+        }
 
         $('.actFilter').css('display', 'none');
         $('.formSubmit').css('display', 'inline');

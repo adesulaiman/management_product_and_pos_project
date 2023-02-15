@@ -45,7 +45,7 @@ select count(1) items from data_product where coalesce(is_delete, 0)=0
 $salesGraph = $adeQ->select("
 select 
 sum((payment_cash + payment_trasnfer + payment_debit + payment_credit + payment_dp)) value,
-DATE_FORMAT(sales_date, \"new Date(%Y, %m, %d).getTime()\") date
+DATE_FORMAT(sales_date, \"new Date('%Y-%m-%d').getTime()\") date
 from data_sales
 where DATE_FORMAT(sales_date, \"%Y\") = " . date("Y") . "
 group by DATE_FORMAT(sales_date, \"%Y %m %d\")

@@ -11,20 +11,20 @@ if (isset($_SESSION['userid'])) {
         $updStock = $adeQ->query(
             "UPDATE data_stock_product s inner join 
             (
-                select r.barcode, sum(qty_receive) qty, sum(r.qty_receive * p.gram) gram from data_detail_receive r
+                select r.barcode, sum(qty_receive) qty, sum(r.qty_receive * p.netto_gram) netto_gram, sum(r.qty_receive * p.brutto_gram) brutto_gram  from data_detail_receive r
                 inner join data_product p on r.barcode=p.barcode
                 where r.id_receive=$_POST[id_receive]
                 group by r.barcode
             ) as d
             ON s.barcode = d.barcode and s.id_category_storage = $_POST[id_storage]
-            SET s.qty_stock = s.qty_stock + d.qty, s.gram = s.gram + d.gram, s.stock_date = '".date("Y-m-d H:i:s")."', created_by = 'Receive'"
+            SET s.qty_stock = s.qty_stock + d.qty, s.netto_gram = s.netto_gram + d.netto_gram, s.brutto_gram = s.brutto_gram + d.brutto_gram, s.stock_date = '".date("Y-m-d H:i:s")."', created_by = 'Receive'"
         );
 
         $insStock = $adeQ->query(
-            "insert data_stock_product (barcode, id_category_storage, qty_stock, gram, stock_date, created_by)
-            select d.barcode, $_POST[id_storage], d.qty, d.gram, '".date("Y-m-d H:i:s")."', 'Receive' from 
+            "insert data_stock_product (barcode, id_category_storage, qty_stock, netto_gram, brutto_gram, stock_date, created_by)
+            select d.barcode, $_POST[id_storage], d.qty, d.netto_gram, d.brutto_gram, '".date("Y-m-d H:i:s")."', 'Receive' from 
             (
-                select r.barcode, sum(qty_receive) qty, sum(r.qty_receive * p.gram) gram from data_detail_receive r
+                select r.barcode, sum(qty_receive) qty, sum(r.qty_receive * p.netto_gram) netto_gram, sum(r.qty_receive * p.brutto_gram) brutto_gram from data_detail_receive r
                 inner join data_product p on r.barcode=p.barcode
                 where r.id_receive=$_POST[id_receive]
                 group by r.barcode

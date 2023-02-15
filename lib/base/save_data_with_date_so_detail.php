@@ -500,7 +500,6 @@ if (isset($_SESSION['userid'])) {
 				if (
 					!empty($_POST['id_category_storage']) &&
 					!empty($_POST['qty_phisycal']) &&
-					!empty($_POST['gram_product']) &&
 					!empty($_POST['id_so']) &&
 					!empty($_POST['product']) &&
 					!empty($_POST['barcode'])
@@ -527,7 +526,6 @@ if (isset($_SESSION['userid'])) {
 						"barcode" => "'$_POST[barcode]'",
 						"product_name" => "'$_POST[product]'",
 						"qty_phisycal" => $_POST['qty_phisycal'],
-						"gram_physycal" => $_POST['qty_phisycal'] * $_POST['gram_product'],
 						"created_by" => "'$_SESSION[userid]'",
 						"created_date" => "'" . date("Y-m-d H:i:s") . "'",
 					];
@@ -555,13 +553,11 @@ if (isset($_SESSION['userid'])) {
 				//get data
 				if (
 					!empty($_POST['id']) &&
-					!empty($_POST['qty_adjusment']) &&
-					!empty($_POST['gram_product'])
+					!empty($_POST['qty_adjusment']) 
 				) {
 
 					$data = [
 						"qty_adjusment" => $_POST['qty_adjusment'],
-						"gram_adjusment" => $_POST['qty_adjusment'] * $_POST['gram_product'],
 						"created_by" => "'$_SESSION[userid]'",
 						"created_date" => "'" . date("Y-m-d H:i:s") . "'",
 					];
@@ -599,13 +595,17 @@ if (isset($_SESSION['userid'])) {
 						d.barcode,
 						d.product_name,
 						d.qty_phisycal,
-						coalesce(d.gram_physycal, 0) gram_phisycal,
+						coalesce(p.netto_gram, 0) * coalesce(d.qty_phisycal, 0) netto_gram_physycal ,
+						coalesce(p.brutto_gram, 0) * coalesce(d.qty_phisycal, 0) brutto_gram_physycal ,
 						coalesce(s.qty_stock, 0) qty_stock,
-						coalesce(s.gram, 0) gram_stock,
+						coalesce(s.netto_gram, 0) netto_gram_stock,
+						coalesce(s.brutto_gram, 0) brutto_gram_stock,
 						coalesce(d.qty_adjusment, 0) qty_adjusment,
-						coalesce(d.gram_adjusment, 0) gram_adjusment,
+						coalesce(p.netto_gram, 0) * coalesce(d.qty_adjusment, 0) netto_gram_adjusment ,
+						coalesce(p.brutto_gram, 0) * coalesce(d.qty_adjusment, 0) brutto_gram_adjusment ,
 						(d.qty_phisycal - coalesce(s.qty_stock, 0)) + coalesce(d.qty_adjusment, 0)  qty_diff,
-						((d.qty_phisycal * coalesce(p.gram, 0) ) - coalesce(s.gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.gram, 0)) gram_diff,
+						((d.qty_phisycal * coalesce(p.netto_gram, 0) ) - coalesce(s.netto_gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.netto_gram, 0)) netto_gram_diff,
+						((d.qty_phisycal * coalesce(p.brutto_gram, 0) ) - coalesce(s.brutto_gram, 0)) + (coalesce(d.qty_adjusment, 0) * coalesce(p.brutto_gram, 0)) brutto_gram_diff,
 						d.created_by,
 						d.created_date
 						from data_stock_opname_detail d
@@ -621,29 +621,33 @@ if (isset($_SESSION['userid'])) {
 							UPDATE data_stock_product s inner join 
 							(
 								select 
-								id_category_storage , 
-								barcode,
-								coalesce(qty_phisycal,0) + coalesce(qty_adjusment,0) qty,
-								coalesce(gram_physycal,0) + coalesce(gram_adjusment,0) gram
-								from data_stock_opname_detail
-								where id_stock_opname=$_POST[id_stock]
+								d.id_category_storage , 
+								d.barcode,
+								coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0) qty,
+								coalesce(p.netto_gram,0)  * (coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0)) netto_gram,
+								coalesce(p.brutto_gram,0)  * (coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0)) brutto_gram
+								from data_stock_opname_detail d
+								left join data_product p on d.barcode=p.barcode
+								where d.id_stock_opname=$_POST[id_stock]
 							) as d
 							ON s.barcode = d.barcode and s.id_category_storage = d.id_category_storage
-							SET s.qty_stock = d.qty, s.gram = d.gram, s.stock_date = '".date("Y-m-d H:i:s")."' , s.created_by = 'SO', 
+							SET s.qty_stock = d.qty, s.netto_gram = d.netto_gram, s.brutto_gram = d.brutto_gram, s.stock_date = '".date("Y-m-d H:i:s")."' , s.created_by = 'SO', 
 							s.created_date = '".date("Y-m-d H:i:s")."'
 						");
 
 						$insStock = $adeQ->query("
-							insert into data_stock_product (barcode, id_category_storage, qty_stock, gram, stock_date, created_by, created_date)
+							insert into data_stock_product (barcode, id_category_storage, qty_stock, netto_gram, brutto_gram,  stock_date, created_by, created_date)
 							select 
 							d.barcode,
 							d.id_category_storage , 
 							coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0) qty,
-							coalesce(d.gram_physycal,0) + coalesce(d.gram_adjusment,0) gram,
+							coalesce(p.netto_gram,0)  * (coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0)) netto_gram,
+							coalesce(p.brutto_gram,0)  * (coalesce(d.qty_phisycal,0) + coalesce(d.qty_adjusment,0)) brutto_gram,
 							'".date("Y-m-d H:i:s")."',
 							'SO',
 							'".date("Y-m-d H:i:s")."'
 							from data_stock_opname_detail d
+							left join data_product p on d.barcode=p.barcode
 							left join data_stock_product s on d.barcode=s.barcode and d.id_category_storage=s.id_category_storage
 							where id_stock_opname=$_POST[id_stock]
 							and s.barcode is null

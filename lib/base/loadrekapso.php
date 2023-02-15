@@ -13,7 +13,7 @@ if (isset($_SESSION['userid'])) {
             select 
             c.storage_name,
             sum((d.qty_phisycal - coalesce(s.qty_stock, 0)) + coalesce(d.qty_adjusment, 0)) as  gap_qty,
-            sum(((d.qty_phisycal * coalesce(p.gram, 0) ) - coalesce(s.gram, 0)) + coalesce(d.gram_adjusment, 0)) as gap_gram
+            sum(((d.qty_phisycal * coalesce(p.brutto_gram, 0) ) - coalesce(s.brutto_gram, 0)) + coalesce(d.brutto_gram_adjusment, 0)) as gap_gram
             from data_stock_opname_detail d
             left join data_product p on d.barcode=p.barcode
             left join data_category_storage c on d.id_category_storage = c.id
@@ -28,7 +28,7 @@ if (isset($_SESSION['userid'])) {
             select 
             c.storage_name,
             sum((d.qty_phisycal - coalesce(d.qty_stock, 0)) + coalesce(d.qty_adjusment, 0)) as  gap_qty,
-            sum(((d.gram_physycal ) - coalesce(d.gram_stock, 0)) + coalesce(d.gram_adjusment, 0)) as gap_gram
+            sum(((d.brutto_gram_physycal ) - coalesce(d.brutto_gram_stock, 0)) + coalesce(d.brutto_gram_adjusment, 0)) as gap_gram
             from data_stock_opname_detail_report d
             left join data_category_storage c on d.id_category_storage = c.id
             where d.id_stock_opname=%s
